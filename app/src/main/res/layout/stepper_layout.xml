@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/parent_step">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/step_count"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/step_check_suface"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/top_line"
+        android:layout_width="2dp"
+        android:layout_height="15dp"
+        android:background="?attr/secondary_selection"
+        app:layout_constraintTop_toBottomOf="@id/step_count"
+        app:layout_constraintStart_toStartOf="@id/step_count"
+        app:layout_constraintEnd_toEndOf="@id/step_count"/>
+
+    <View
+        android:id="@+id/bottom_line"
+        android:layout_width="2dp"
+        android:layout_height="15dp"
+        android:background="?attr/secondary_selection"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/step_count"
+        app:layout_constraintEnd_toEndOf="@id/step_count"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/step_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="83dp"
+        android:text="Videos"
+        android:textColor="?attr/title_text_color"
+        android:textSize="18sp"
+        android:fontFamily="@font/roboto_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/step_count"
+        app:layout_constraintBottom_toBottomOf="@id/step_count"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/step_actions_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/step_header">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 00:00 "
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:padding="8dp"
+            android:background="@drawable/task_timer_surface"
+            android:textColor="?attr/title_text_color"
+            android:fontFamily="@font/roboto_light"
+            android:layout_marginStart="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/stopwatch_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:textColor="?attr/title_text_color"
+            android:fontFamily="@font/roboto_light"
+            android:layout_marginStart="24dp"
+            app:layout_constraintTop_toTopOf="@id/timer_tv"
+            app:layout_constraintBottom_toTopOf="@id/step_status_tv"
+            app:layout_constraintStart_toEndOf="@id/timer_tv"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/step_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10% of 5 min 20 seconds"
+            android:textSize="14sp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintTop_toBottomOf="@id/stopwatch_tv"
+            app:layout_constraintStart_toEndOf="@id/timer_tv"
+            app:layout_constraintBottom_toBottomOf="@id/timer_tv"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_timer_play_pause"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_pause_24"
+            android:layout_marginStart="24dp"
+            android:visibility="gone"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/timer_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="?attr/icon_tint"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_start_stopwatch"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_timer"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/step_status_tv"
+            app:layout_constraintStart_toEndOf="@id/action_timer_play_pause"
+            app:tint="?attr/icon_tint"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_enable_analytics"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_bar_chart_24"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/step_status_tv"
+            app:layout_constraintStart_toEndOf="@id/action_start_stopwatch"
+            app:tint="?attr/icon_tint"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_skip_step"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_skip_next_24"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/step_status_tv"
+            app:layout_constraintStart_toEndOf="@id/action_enable_analytics"
+            app:tint="?attr/icon_tint"/>
+
+        <View
+            android:id="@+id/expandable_line"
+            android:layout_width="2dp"
+            android:layout_height="120dp"
+            android:background="?attr/secondary_selection"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="39dp"/>
+
+        <View
+            android:id="@+id/divider_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?attr/secondary_selection"
+            app:layout_constraintTop_toBottomOf="@id/action_start_stopwatch"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

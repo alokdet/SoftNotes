@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp"
+    android:layout_marginStart="18dp"
+    android:layout_marginEnd="18dp"
+    android:layout_marginTop="18dp"
+    android:background="@drawable/step_item_surface"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/step_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Step"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="18sp"
+        android:imeOptions="actionNext"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="74dp"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:background="?attr/foreground_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/define_step"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/icon_arrow_back"
+        android:rotation="180"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="15dp"
+        android:padding="5dp"
+        android:background="@drawable/circular_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

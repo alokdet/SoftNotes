@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
+    android:background="@drawable/note_preview_background">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/exit_floating_window"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/baseline_fullscreen_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/note_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="50dp"
+        android:textSize="18sp"
+        android:lineSpacingExtra="8dp"
+        android:fontFamily="@font/roboto_light"
+        app:layout_constraintTop_toBottomOf="@id/exit_floating_window"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

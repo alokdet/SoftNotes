@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/date_time_tv"
+        android:text="22 April 2023"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/note_scroll_view"
+        app:layout_constraintStart_toStartOf="@id/note_scroll_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/page_number_tv"
+        android:text="/"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/note_scroll_view"
+        app:layout_constraintEnd_toEndOf="@id/note_scroll_view"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/text_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginTop="50dp"/>
+
+    <ScrollView
+        android:id="@+id/note_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="25dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/input_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type Note"
+            android:textColor="?attr/sub_text_color"
+            android:background="?attr/foreground_color"
+            android:fontFamily="@font/roboto_light"
+            android:lineSpacingExtra="8dp"
+            android:textSize="18sp" />
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

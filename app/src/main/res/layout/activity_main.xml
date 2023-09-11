@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_parent"
+    android:background="?attr/background_color"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            app:contentScrim="?attr/background_color"
+            app:expandedTitleMarginBottom="30dp"
+            app:expandedTitleMarginEnd="30dp"
+            app:expandedTitleMarginTop="50dp"
+            app:expandedTitleGravity="top|right"
+            app:collapsedTitleGravity="top|right"
+            app:collapsedTitleTextAppearance="@style/collapsed_title"
+            app:expandedTitleTextAppearance="@style/expanded_title"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:title="Notes">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:elevation="0dp"
+                app:title="Recordings"
+                app:titleMarginEnd="30dp"
+                app:titleMarginTop="24dp"
+                app:titleTextAppearance="@style/collapsed_title"
+                app:titleTextColor="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:gravity="bottom"
+                android:paddingTop="30dp"
+                app:elevation="0dp"
+                app:layout_collapseMode="parallax"
+                android:orientation="vertical">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/page_text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Page One"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/page_text2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Page Two"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/page_text3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Page Three"/>
+
+                </androidx.viewpager.widget.ViewPager>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/search_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:hint="Search"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    android:fontFamily="@font/roboto_regular"
+                    android:background="?attr/background_color"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginEnd="28dp"
+                    android:layout_marginBottom="5dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/foreground_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/foreground_layer_surface"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/notes_tab"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_view_list"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fragments_pager"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/tasks_tab"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_splitscreen_top"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintStart_toEndOf="@id/notes_tab"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fragments_pager"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/maps_tab"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_develepor_board"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintStart_toEndOf="@id/tasks_tab"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fragments_pager"/>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/fragments_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:layout_marginTop="58dp"
+            android:layout_marginBottom="58dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/action_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:transitionName="actionBtn"
+        android:layout_marginBottom="75dp"
+        android:background="@drawable/action_btn_surface"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/new_text_note"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_add"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/actions_two"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="?attr/foreground_color"
+        android:layout_gravity="bottom">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/one"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_sort"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/search_action"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/search_action"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_search"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintStart_toEndOf="@id/one"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/delete_action"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/delete_fill0_wght400_grad0_opsz48"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/search_action"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/camera_action"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_camera_filled"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintStart_toEndOf="@id/delete_action"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/open_planner"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_article"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintStart_toEndOf="@id/camera_action"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/settings"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_menu"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="28dp"
+            app:tint="?attr/icon_tint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

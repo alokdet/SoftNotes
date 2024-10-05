@@ -9,7 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_light">#f5f7fa</color>
     <color name="onBackground_light">#555555</color>
+    <color name="dark_foreground">#1C1C1C</color>
     <color name="android_green">#3ddc84</color>
     <color name="selectionColor">#202020</color>
     <color name="scarlet_red">#EF3113</color>
+    <color name="red_shade">#ED6E6E</color>
 </resources>

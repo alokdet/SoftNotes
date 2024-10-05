@@ -1,27 +1,25 @@
 package com.example.softnotesbeta;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.view.View;
 import android.view.Window;
 
+import com.example.softnotesbeta.Application.SoftScript.SoftScriptGenerator;
 import com.example.softnotesbeta.ContentControllers.ContentModels.ActionsToActivity;
+import com.example.softnotesbeta.Models.EditTaskModel;
+import com.example.softnotesbeta.Models.TaskExitedModel;
 
-public class TaskWorkspace extends AppCompatActivity implements ActionsToActivity.ActionRequestImage, ActionsToActivity.ActionRequestVideo, ActionsToActivity.ActionRequestDocument, ActionsToActivity.ActionRequestAudio {
+public class TaskWorkspace extends AppCompatActivity implements EditTaskModel.OnTaskEditRequest {
 
-    private static final int ACTION_PICK_IMAGE = 0;
-    private static final int ACTION_PICK_VIDEO = 1;
-    private static final int ACTION_PICK_AUDIO = 2;
-    private static final int ACTION_PICK_DOCUMENT = 3;
     private String work;
 
     @Override
@@ -55,6 +53,7 @@ public class TaskWorkspace extends AppCompatActivity implements ActionsToActivit
         getSupportActionBar().hide();
 
         work = getIntent().getStringExtra("work");
+        EditTaskModel.getInstance().setListener(this);
 
         if (savedInstanceState == null) {
             Bundle bundle = new Bundle();
@@ -65,58 +64,29 @@ public class TaskWorkspace extends AppCompatActivity implements ActionsToActivit
                         .setReorderingAllowed(true)
                         .add(R.id.fragment_container_view, CreateTaskFragment.class, null)
                         .commit();
-            } else if(work.equals("view_update")) {
-                getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(true)
-                        .add(R.id.fragment_container_view, TaskWorkstation.class, bundle)
-                        .commit();
             } else {
                 getSupportFragmentManager().beginTransaction()
                         .setReorderingAllowed(true)
-                        .add(R.id.fragment_container_view, CreateTaskFragment.class, null)
+                        .add(R.id.fragment_container_view, CreateTaskFragment.class, bundle)
                         .commit();
             }
         }
-
-        ActionsToActivity.getInstance().setImageListener(this);
-        ActionsToActivity.getInstance().setVideoListener(this);
-        ActionsToActivity.getInstance().setAudioListener(this);
-        ActionsToActivity.getInstance().setDocumentListener(this);
-    }
-
-
-    @Override
-    public void onImageCLicked() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Images"), ACTION_PICK_IMAGE);
     }
 
     @Override
-    public void onVideoCLicked() {
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        //TaskExitedModel.getInstance().createTask();
     }
 
     @Override
-    public void onAudioCLicked() {
-
-    }
-
-    @Override
-    public void onDocumentCLicked() {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ACTION_PICK_IMAGE) {
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, FilePreviewFragment.class, null)
-                    .commit();
-        }
+    public void onTaskRequest(long taskId) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("taskId", taskId);
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragment_container_view, CreateTaskFragment.class, bundle)
+                .commit();
     }
 }

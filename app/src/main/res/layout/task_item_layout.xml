@@ -16,12 +16,12 @@
         android:layout_marginEnd="20dp"
         android:padding="10dp"
         android:src="@drawable/icon_done"
+        android:visibility="gone"
         android:background="@drawable/circular_background"
-        android:backgroundTint="@color/selectionColor"
         app:layout_constraintBottom_toBottomOf="@id/task_due_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/task_name"
-        app:tint="@color/white" />
+        app:tint="@color/black" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/task_name"
@@ -46,20 +46,5 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@id/task_name"
         app:layout_constraintTop_toBottomOf="@id/task_name" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/task_details_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/task_due_tv">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/steps_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

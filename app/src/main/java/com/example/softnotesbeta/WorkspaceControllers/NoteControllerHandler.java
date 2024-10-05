@@ -9,19 +9,25 @@ import android.view.animation.Transformation;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.softnotesbeta.Entities.Note;
+import com.example.softnotesbeta.Models.ListItem;
+import com.example.softnotesbeta.Workspace;
+
+import java.util.List;
 
 public class NoteControllerHandler {
 
     private ConstraintLayout layout1;
     private ConstraintLayout layout2;
     private ConstraintLayout layout3;
+    private String noteType;
     private int currentActionSet;
     private int currentHeader;
     private RegularController regularActions;
-    private TranslateController translateActions;
+    private ImageActions imageActions;
     private WriteController writeController;
+    private ImageController imageController;
+    private ListController listController;
     private RegularHeader regularHeader;
-    private TranslateHeader translateHeader;
 
     private static NoteControllerHandler INSTANCE = null;
     private NoteControllerHandler() {}
@@ -33,18 +39,20 @@ public class NoteControllerHandler {
         return INSTANCE;
     }
 
-    public void initialise(ConstraintLayout layout1, ConstraintLayout layout2, ConstraintLayout layout3) {
+    public void initialise(ConstraintLayout layout1, ConstraintLayout layout2, ConstraintLayout layout3, String noteType, Workspace activity) {
         this.layout1 = layout1;
         this.layout2 = layout2;
         this.layout3 = layout3;
+        this.noteType = noteType;
 
         regularActions = new RegularController(layout1);
-        translateActions = new TranslateController(layout1);
+        imageActions = new ImageActions(layout1);
 
         regularHeader = new RegularHeader(layout2);
-        translateHeader = new TranslateHeader(layout2);
 
-        writeController = new WriteController(layout3);
+        writeController = new WriteController(layout3, activity);
+        imageController = new ImageController(layout3);
+        listController = new ListController(layout3);
 
         setDefaultActionSet();
         setDefaultHeader();
@@ -52,14 +60,34 @@ public class NoteControllerHandler {
     }
 
     private void setDefaultNoteLayout() {
-        writeController.activate();
+        switch (noteType) {
+            case "text":
+                writeController.activate();
+                break;
+            case "image":
+                imageController.activate();
+                break;
+            case "list":
+                listController.activate();
+                break;
+        }
     }
 
     private void setDefaultActionSet() {
-        if (currentActionSet != 0) {
-            removeCurrentActionSet();
+        switch (noteType) {
+            case "text":
+                if (currentActionSet != 0) {
+                    removeCurrentActionSet();
+                }
+                regularActions.activate();
+                break;
+            case "image":
+                imageActions.activate();
+                break;
+            case "list":
+                listController.activate();
+                break;
         }
-        regularActions.activate();
     }
 
     private void setDefaultHeader() {
@@ -73,32 +101,68 @@ public class NoteControllerHandler {
         regularActions.activate();
     }
 
-    public void setTranslateController() {
-        translateActions.activate();
-    }
-
     public void setRegularHeader() {
         removeCurrentHeader();
         regularHeader.activate();
     }
-    public void setTranslateHeader() {
-        removeCurrentHeader();
-        translateHeader.activate();
-    }
 
     public void setTranslatedText(String text) {
-        translateHeader.setTranslatedText(text);
+        writeController.setTranslatedText(text);
     }
 
     public Note getNoteModel() {
-        Note note = new Note(regularHeader.getNoteTitle(), writeController.getNote(), writeController.getDate());
-        return note;
+        Note note;
+        switch (noteType) {
+            case "text":
+                note = new Note(regularHeader.getNoteTitle(), writeController.getNote(), writeController.getDate(), noteType);
+                return note;
+            case "list":
+                note = new Note(regularHeader.getNoteTitle(), "", listController.getDate(), noteType);
+                note.setList(listController.getItemsList());
+                return note;
+            case "image":
+                note = new Note(regularHeader.getNoteTitle(), imageController.getGeneratedSoftScript(), imageController.getDate(), noteType);
+                return note;
+        }
+        return null;
+    }
+
+    public List<ListItem> getList() {
+        return listController.getItemsList();
+    }
+
+    public void handleImageNoteInsertion(String path) {
+        imageController.handleImageInsertion(path);
+    }
+
+    public void sss() {
+        //regularHeader.setNoteTitle(imageController.getSoftScript());
     }
 
     public void setNote(Note note) {
-        regularHeader.setNoteTitle(note.getTitle());
-        writeController.setNote(note.getText());
-        writeController.setDate(note.getDate());
+        switch (noteType) {
+            case "text":
+                regularHeader.setNoteTitle(note.getTitle());
+                writeController.setNote(note.getText());
+                writeController.setDate(note.getDate());
+                break;
+            case "list":
+                regularHeader.setNoteTitle(note.getTitle());
+                listController.setItemsList(note.getList());
+                listController.displayList();
+                listController.setDate(note.getDate());
+                break;
+            case "image":
+                regularHeader.setNoteTitle(note.getTitle());
+                imageController.setSoftScript(note.getText());
+                imageController.displayImages();
+                imageController.setDate(note.getDate());
+                break;
+        }
+    }
+
+    public String getNoteType() {
+        return this.noteType;
     }
 
     public void setAlignment(int alignment) {
@@ -118,7 +182,35 @@ public class NoteControllerHandler {
     }
 
     public void page() {
-        writeController.changeMode();
+        writeController.changeMode(1);
+    }
+
+    public void initTranslatePager() {
+        writeController.changeMode(2);
+    }
+
+    public void normalTextMode() {
+        writeController.changeMode(0);
+    }
+
+    public void startTTS() {
+        writeController.startTTS();
+    }
+
+    public void stopTTS() {
+
+    }
+
+    public void startHeader() {
+        writeController.setHeader(true);
+    }
+
+    public void stopHeader() {
+        writeController.setHeader(false);
+    }
+
+    public boolean getHeaderState() {
+        return writeController.getHeader();
     }
 
     public void setNoteDetails(String details) {
@@ -126,11 +218,30 @@ public class NoteControllerHandler {
     }
 
     public String getNoteText() {
-        return writeController.getNote();
+        switch (noteType) {
+            case "text":
+                return writeController.getNote();
+            case "list":
+                return listController.getItemsList().toString();
+            case "image":
+                return imageController.getGeneratedSoftScript();
+        }
+        return null;
+    }
+
+    public void setNoteType(String noteType) {
+        this.noteType = noteType;
     }
 
     public void setNoteText(String text) {
-        writeController.setNote(text);
+        switch (noteType) {
+            case "text":
+                writeController.setNote(text);
+                break;
+            case "image":
+                imageController.displayImages();
+                break;
+        }
     }
 
     public void setNoteText(SpannableStringBuilder text) {
@@ -142,11 +253,29 @@ public class NoteControllerHandler {
     }
 
     public String getDate() {
-        return writeController.getDate();
+        switch (noteType) {
+            case "text":
+                return writeController.getDate();
+            case "list":
+                return listController.getDate();
+            case "image":
+                return imageController.getDate();
+        }
+        return null;
     }
 
     public void setDate(String date) {
-        writeController.setDate(date);
+        switch (noteType) {
+            case "text":
+                writeController.setDate(date);
+                break;
+            case "list":
+                listController.setDate(date);
+                break;
+            case "image":
+                imageController.setDate(date);
+                break;
+        }
     }
 
     public String getTitle() {
@@ -196,9 +325,6 @@ public class NoteControllerHandler {
             case 0:
                 regularActions.deActivate();
                 break;
-            case 1:
-                translateActions.deActivate();
-                break;
         }
     }
 
@@ -206,9 +332,6 @@ public class NoteControllerHandler {
         switch (currentHeader) {
             case 1:
                 regularHeader.deActivate();
-                break;
-            case 2:
-                translateHeader.deActivate();
                 break;
         }
     }

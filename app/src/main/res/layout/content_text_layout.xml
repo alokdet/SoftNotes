@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/content_text_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="?attr/title_text_color"
+            android:lineSpacingExtra="6dp"
+            android:layout_margin="24dp"
+            android:fontFamily="@font/roboto_regular"/>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

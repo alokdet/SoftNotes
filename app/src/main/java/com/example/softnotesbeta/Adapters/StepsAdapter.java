@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.softnotesbeta.Models.Step;
+import com.example.softnotesbeta.Entities.Step;
 import com.example.softnotesbeta.R;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ImageViewHol
     List<Step> steps;
     Context context;
 
-    public StepsAdapter(List<Step> steps, Context context) {
+    public StepsAdapter(List<com.example.softnotesbeta.Entities.Step> steps, Context context) {
         this.steps = steps;
         this.context = context;
     }
@@ -35,12 +35,12 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ImageViewHol
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         holder.checkBox.setText(steps.get(position).getName());
-        holder.checkBox.setChecked(steps.get(position).isDone());
+        //holder.checkBox.setChecked(steps.get(position).isDone());
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                steps.get(holder.getAdapterPosition()).setDone(isChecked);
+                //steps.get(holder.getAdapterPosition()).setDone(isChecked);
             }
         });
     }

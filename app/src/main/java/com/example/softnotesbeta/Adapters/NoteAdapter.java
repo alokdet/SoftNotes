@@ -1,6 +1,12 @@
 package com.example.softnotesbeta.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.BulletSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +24,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.softnotesbeta.Entities.Note;
 import com.example.softnotesbeta.Entities.Preview;
 import com.example.softnotesbeta.MainActivity;
+import com.example.softnotesbeta.Models.ListItem;
 import com.example.softnotesbeta.NoteItemClickListener;
 
 import com.example.softnotesbeta.OnSelectionStart;
 import com.example.softnotesbeta.R;
+
+import java.util.List;
 
 public class NoteAdapter extends PagedListAdapter<Preview, NoteAdapter.NoteViewHolder> {
 
@@ -52,7 +61,12 @@ public class NoteAdapter extends PagedListAdapter<Preview, NoteAdapter.NoteViewH
 
         if (note != null) {
             noteViewHolder.titleTextView.setText(note.title);
-            noteViewHolder.previewTextView.setText(note.preview);
+
+            if (note.getType().equals("list")) {
+                noteViewHolder.previewTextView.setText("List");
+            } else {
+                noteViewHolder.previewTextView.setText(note.preview);
+            }
             noteViewHolder.dateTextView.setText(note.date);
 
             ViewCompat.setTransitionName(noteViewHolder.item_layout, String.valueOf(note.id));
@@ -100,6 +114,10 @@ public class NoteAdapter extends PagedListAdapter<Preview, NoteAdapter.NoteViewH
         }
     };
 
+    private float dp(int dp) {
+        return context.getResources().getDisplayMetrics().density * dp;
+    }
+
     class NoteViewHolder extends RecyclerView.ViewHolder{
 
         AppCompatTextView titleTextView, previewTextView;
@@ -116,5 +134,18 @@ public class NoteAdapter extends PagedListAdapter<Preview, NoteAdapter.NoteViewH
             select_icon = (AppCompatImageView) itemView.findViewById(R.id.select_indic);
             item_layout = (ConstraintLayout) itemView.findViewById(R.id.item_container);
         }
+    }
+
+    private CharSequence makeListPreview(List<ListItem> list) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+        for (int index = 0; index < list.size();  index++) {
+            String text = list.get(index).getText();
+            String line = text + (index < list.size() - 1 ? "\n" : "");
+
+            Spannable spannable = new SpannableString(line);
+            spannable.setSpan(new BulletSpan(15, Color.GRAY), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannableStringBuilder.append(spannable);
+        }
+        return spannableStringBuilder;
     }
 }

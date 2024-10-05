@@ -1,16 +1,23 @@
 package com.example.softnotesbeta.Models;
 
+import java.util.List;
+
 public class Step {
     private int stepIndex;
     private String name;
     private String content;
     private String softScript;
+    private String contentSoftScript;
     private boolean done;
 
     private boolean expand;
 
     public Step() {
 
+    }
+
+    public Step(String name) {
+        this.name = name;
     }
 
     public Step(int index, String name) {
@@ -26,6 +33,14 @@ public class Step {
         this.done = false;
     }
 
+    public String getContentSoftScript() {
+        return contentSoftScript;
+    }
+
+    public void setContentSoftScript(String contentSoftScript) {
+        this.contentSoftScript = contentSoftScript;
+    }
+
     public int getStepIndex() {
         return stepIndex;
     }
@@ -38,8 +53,8 @@ public class Step {
         return softScript;
     }
 
-    public void setSoftScript(String softScript) {
-        this.softScript = softScript;
+    public void setSoftScript(String script) {
+        this.softScript = script;
     }
 
     public void setExpand(boolean expand) {

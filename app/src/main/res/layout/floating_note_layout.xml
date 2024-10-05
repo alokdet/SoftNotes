@@ -14,13 +14,14 @@
         android:layout_marginEnd="25dp"
         android:src="@drawable/baseline_fullscreen_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/note_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="25dp"
+        android:scrollbars="vertical"
         android:layout_marginEnd="25dp"
         android:layout_marginTop="50dp"
         android:textSize="18sp"

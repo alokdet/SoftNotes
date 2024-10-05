@@ -1,7 +1,9 @@
 package com.example.softnotesbeta.WorkspaceControllers;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.text.Spannable;
@@ -9,6 +11,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.BulletSpan;
 import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,13 +29,16 @@ import com.example.softnotesbeta.DAOs.PreviewDao;
 import com.example.softnotesbeta.Database.NotesDatabase;
 import com.example.softnotesbeta.Entities.Note;
 import com.example.softnotesbeta.Entities.Preview;
-import com.example.softnotesbeta.Models.AttachmentsModel;
+import com.example.softnotesbeta.MainActivity2;
+import com.example.softnotesbeta.Models.ListItem;
 import com.example.softnotesbeta.Models.SaveNoteModel;
+import com.example.softnotesbeta.Models.TranslateCallbacks;
 import com.example.softnotesbeta.R;
+import com.example.softnotesbeta.TextScannerActivity;
 
-import java.util.logging.Handler;
+import java.util.List;
 
-public class RegularController implements SaveNoteModel.OnBackPressed, AttachmentsModel.OnImageImported, TextToSpeech.OnInitListener {
+public class RegularController implements SaveNoteModel.OnBackPressed, TextToSpeech.OnInitListener {
 
     private ConstraintLayout layout;
     private View view;
@@ -48,7 +54,6 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
 
         handler = NoteControllerHandler.getInstance();
         SaveNoteModel.getInstance().setBackListener(this::onBackPressed);
-        AttachmentsModel.getInstance().setListener(this::onImageImported);
         database = NotesDatabase.getInstance(layout.getContext());
         noteDao = database.noteDao();
         previewDao = database.previewDao();
@@ -62,10 +67,8 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
 
         AppCompatImageView actionTextAlign = (AppCompatImageView) view.findViewById(R.id.alignment);
         AppCompatImageView actionTranslateText = (AppCompatImageView) view.findViewById(R.id.translate);
-        AppCompatImageView actionPaginateText = (AppCompatImageView) view.findViewById(R.id.paginate_note);
-        AppCompatImageView actionInsertImage = (AppCompatImageView) view.findViewById(R.id.attach_img);
-        AppCompatImageView actionLaunchFloatingView = (AppCompatImageView) view.findViewById(R.id.floating_view);
-        AppCompatImageView actionStartTTS = (AppCompatImageView) view.findViewById(R.id.action_tts);
+        AppCompatImageView actionExtractText = (AppCompatImageView) view.findViewById(R.id.extract_text);
+        AppCompatImageView actionTTS = (AppCompatImageView) view.findViewById(R.id.action_tts);
         AppCompatImageView actionSaveNote = (AppCompatImageView) view.findViewById(R.id.save_note);
 
         actionTextAlign.setOnClickListener(new View.OnClickListener() {
@@ -88,38 +91,35 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
         actionTranslateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 handler.removeCurrentActionSet();
+                handler.removeCurrentHeader();
                 handler.setTranslateController();
                 handler.collapseLayout();
                 handler.setTranslateHeader();
+
+                 */
+                TranslateCallbacks.getInstance().expand();
+               // actionTranslateText.setBackground(layout.getContext().getResources().getDrawable(R.drawable.note_preview_background));
+               // actionTranslateText.setPadding(5, 5, 5, 5);
+                handler.initTranslatePager();
+
             }
         });
 
-        actionPaginateText.setOnClickListener(new View.OnClickListener() {
+        actionExtractText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handler.page();
+                //handler.page();
+                Intent intent = new Intent(layout.getContext(), TextScannerActivity.class);
+                layout.getContext().startActivity(intent);
             }
         });
 
-        actionInsertImage.setOnClickListener(new View.OnClickListener() {
+        actionTTS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AttachmentsModel.getInstance().actionTriggered(1);
-            }
-        });
-
-        actionLaunchFloatingView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AttachmentsModel.getInstance().launchFloatingView();
-            }
-        });
-
-        actionStartTTS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textToSpeech.speak(handler.getNoteText(), TextToSpeech.QUEUE_FLUSH, null, "doesn't matter yet");
+                handler.startTTS();
             }
         });
 
@@ -144,14 +144,38 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
         String noteText1 = handler.getNoteText();
         Preview preview;
 
-        if (noteText1.length() > 150) {
-            preview = new Preview(id, handler.getTitle(), noteText1.substring(0, 150), handler.getDate());
-        } else {
-            preview = new Preview(id, handler.getTitle(), noteText1, handler.getDate());
+        switch (handler.getNoteType()) {
+            case "text":
+                if (noteText1.length() > 150) {
+                    preview = new Preview(id, handler.getTitle(), noteText1.substring(0, 150), handler.getDate(), handler.getNoteType());
+                } else {
+                    preview = new Preview(id, handler.getTitle(), noteText1, handler.getDate(), handler.getNoteType());
+                }
+                previewDao.insertNoteToDatabase(preview);
+                break;
+            case "list":
+                preview = new Preview(id, handler.getTitle(), makeListPreview(handler.getList()).toString(), handler.getDate(), handler.getNoteType());
+                previewDao.insertNoteToDatabase(preview);
+                break;
+            case "image":
+                preview = new Preview(id, handler.getTitle(), "", handler.getDate(), handler.getNoteType());
+                previewDao.insertNoteToDatabase(preview);
+                break;
         }
-
-        previewDao.insertNoteToDatabase(preview);
         SaveNoteModel.getInstance().createSaveUpdate();
+    }
+
+    private CharSequence makeListPreview(List<ListItem> list) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+        for (int index = 0; index < list.size();  index++) {
+            String text = list.get(index).getText();
+            String line = text + (index < list.size() - 1 ? "\n" : "");
+
+            Spannable spannable = new SpannableString(line);
+            spannable.setSpan(new BulletSpan(15, Color.GRAY), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannableStringBuilder.append(spannable);
+        }
+        return spannableStringBuilder;
     }
 
     private void updateNote(long id) {
@@ -159,18 +183,32 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
         Preview preview = previewDao.getPreview(id);
         Note note = noteDao.getNote(preview.getNoteId());
 
-        if (noteText1.length() > 150) {
-            preview.setTitle(handler.getTitle());
-            preview.setPreview(noteText1.substring(0, 150));
-            preview.setDate(handler.getDate());
-        } else {
-            preview.setTitle(handler.getTitle());
-            preview.setPreview(noteText1);
-            preview.setDate(handler.getDate());
+        switch (handler.getNoteType()) {
+            case "text":
+                if (noteText1.length() > 150) {
+                    preview.setTitle(handler.getTitle());
+                    preview.setPreview(noteText1.substring(0, 150));
+                    preview.setDate(handler.getDate());
+                } else {
+                    preview.setTitle(handler.getTitle());
+                    preview.setPreview(noteText1);
+                    preview.setDate(handler.getDate());
+                }
+                note.setText(noteText1);
+                break;
+            case "list":
+                preview.setTitle(handler.getTitle());
+                preview.setDate(handler.getDate());
+                note.setList(handler.getList());
+                break;
+            case "image":
+                preview.setTitle(handler.getTitle());
+                preview.setDate(handler.getDate());
+                note.setText(noteText1);
+                break;
         }
 
         note.setTitle(handler.getTitle());
-        note.setText(noteText1);
         note.setDate(handler.getDate());
 
         noteDao.updateNote(note);
@@ -184,7 +222,7 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
         transition.addTarget(layout);
 
         TransitionManager.beginDelayedTransition((ViewGroup) layout.getParent(), transition);
-        layout.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.GONE);
     }
 
     public void hide() {
@@ -210,18 +248,6 @@ public class RegularController implements SaveNoteModel.OnBackPressed, Attachmen
             updateNote(id);
         }
 
-    }
-
-    @Override
-    public void onImageImported(Bitmap bitmap) {
-        ImageSpan imageSpan = new ImageSpan(bitmap);
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-        stringBuilder.append(handler.getNoteText());
-        String imgId = "[img=1]";
-        int selectionStart = handler.getSelectionStart();
-        stringBuilder.replace(handler.getSelectionStart(), handler.getSelectionEnd(), imgId);
-        stringBuilder.setSpan(imageSpan, selectionStart, selectionStart + imgId.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        handler.setNoteText(stringBuilder);
     }
 
     @Override

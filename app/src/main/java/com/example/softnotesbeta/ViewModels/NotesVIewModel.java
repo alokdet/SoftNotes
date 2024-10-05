@@ -34,11 +34,11 @@ public class NotesVIewModel extends AndroidViewModel {
         dao = database.previewDao();
     }
 
-    public void initAllPreviews() {
+    public void initAllPreviews(String parent) {
         PagedList.Config config = new PagedList.Config.Builder().setPageSize(10).setEnablePlaceholders(true).build();
         allPreviewList = Transformations.switchMap(filterText, input -> {
             if (input == null || input.equals("") || input.equals("%%")) {
-                return new LivePagedListBuilder<>(dao.getPreviewsPagedList(), config).build();
+                return new LivePagedListBuilder<>(dao.getAllPreviewsPagedList(), config).build();
             } else {
                 return new LivePagedListBuilder<>(dao.searchPreviews(input), config).build();
             }

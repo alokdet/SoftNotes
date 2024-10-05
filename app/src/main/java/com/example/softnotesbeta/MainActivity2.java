@@ -1,40 +1,53 @@
 package com.example.softnotesbeta;
 
-import static android.Manifest.permission.CAMERA;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
+
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.Color;
-import android.hardware.Camera;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.transition.Fade;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.softnotesbeta.Models.Dimensions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+
+import java.io.IOException;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MainActivity2 extends AppCompatActivity {
 
     private String imagePath;
     private AppCompatImageView imageView;
     private AppCompatImageView captureImageBtn;
-    private AppCompatImageView detectTextBtn;
+    private AppCompatImageView saveText;
     private AppCompatTextView textView;
     private Bitmap imageBitmap;
+
+    private TextRecognizer textRecognizer;
     private static final int PERMISSION_CODE = 200;
     private static final int REQUEST_IMAGE_CAPTURE = 300;
     private boolean imageCaptured = false;
@@ -71,83 +84,86 @@ public class MainActivity2 extends AppCompatActivity {
         getSupportActionBar().hide();
 
         imageView = (AppCompatImageView) findViewById(R.id.view_image);
+        saveText = (AppCompatImageView) findViewById(R.id.action_finish_task);
         textView = (AppCompatTextView) findViewById(R.id.recognised_text);
-        captureImageBtn = (AppCompatImageView) findViewById(R.id.capture_image);
-        detectTextBtn = (AppCompatImageView) findViewById(R.id.write_text);
 
         Intent intent = getIntent();
         imagePath = intent.getStringExtra("imagePath");
 
-        Glide.with(getApplicationContext()).load(imagePath).into(imageView);
+        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-        captureImageBtn.setOnClickListener(new View.OnClickListener() {
+        try {
+            scaleImageView();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Glide.with(getApplicationContext()).load(imagePath).apply(new RequestOptions().bitmapTransform(new RoundedCornersTransformation(45, 0, RoundedCornersTransformation.CornerType.ALL))).into(imageView);
+
+        recognizeText();
+
+        saveText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkPermission()) {
-                    captureImage();
-                } else {
-                    requestPermission();
-                }
-            }
-        });
-
-        detectTextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextRecognize textRecognize;
-                if (imageBitmap != null) {
-                    textRecognize = new TextRecognize(imageBitmap, getApplicationContext());
-                    textRecognize.detectText(textView);
-                } else {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    imageBitmap = BitmapFactory.decodeFile(imagePath, options);
-                    imageBitmap = Bitmap.createBitmap(imageBitmap);
-                    textRecognize = new TextRecognize(imageBitmap, getApplicationContext());
-                    textRecognize.detectText(textView);
-                }
+                Intent intent = new Intent(getApplicationContext(), Workspace.class);
+                intent.putExtra("text", textView.getText().toString());
+                intent.putExtra("mode", "create");
+                intent.putExtra("noteType", "text");
+                startActivity(intent);
             }
         });
     }
 
-    private boolean checkPermission() {
-        int cameraPermission = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
-        return cameraPermission == PackageManager.PERMISSION_GRANTED;
-    }
+    private void scaleImageView() throws IOException {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(imagePath));
 
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, PERMISSION_CODE);
-    }
+        Dimensions dimensions = new Dimensions(bitmap.getWidth(), bitmap.getHeight());
+        Dimensions boundary = new Dimensions(680, 680);
 
-    private void captureImage() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePicture.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+        int originalWidth = bitmap.getWidth();
+        int originalHeight = bitmap.getHeight();
+        int boundWidth = boundary.getWidth();
+        int boundHeight = boundary.getHeight();
+        int newWidth = originalWidth;
+        int newHeight = originalHeight;
+
+        if (originalWidth > boundWidth) {
+            newWidth = boundWidth;
+            newHeight = (newWidth * originalHeight) / originalWidth;
         }
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-            imageCaptured = true;
+        if (newHeight > boundHeight) {
+            newHeight = boundHeight;
+            newWidth = (newHeight * originalWidth) / originalHeight;
         }
+
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        params.width = newWidth;
+        params.height = newHeight;
+        imageView.setLayoutParams(params);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private void recognizeText() {
+        try {
+            InputImage inputImage = InputImage.fromFilePath(getApplicationContext(), Uri.parse(imagePath));
 
-        if (grantResults.length > 0) {
-            boolean cameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-            if (cameraPermission) {
-                captureImage();
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
+            Task<Text> textTaskResult = textRecognizer.process(inputImage)
+                    .addOnSuccessListener(new OnSuccessListener<Text>() {
+                        @Override
+                        public void onSuccess(Text text) {
+                            String recognisedText = text.getText();
+                            textView.setText(recognisedText);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity2.this, "Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

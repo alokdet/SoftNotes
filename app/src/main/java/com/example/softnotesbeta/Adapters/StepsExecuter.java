@@ -6,7 +6,7 @@ import com.example.softnotesbeta.WorkspaceControllers.NoteControllerHandler;
 public class StepsExecuter {
 
     private StepperAdapter stepsAdapter;
-    private StepContentPager contentAdapter;
+    private ContentPageAdapter contentAdapter;
     private int currentPosition;
     private Step currentStep;
 
@@ -20,17 +20,17 @@ public class StepsExecuter {
         return INSTANCE;
     }
 
-    public void init(StepperAdapter stepperAdapter, StepContentPager stepContentPager) {
+    public void init(StepperAdapter stepperAdapter, ContentPageAdapter stepContentPager) {
         this.stepsAdapter = stepperAdapter;
         this.contentAdapter = stepContentPager;
     }
 
     public void startTask() {
-        stepsAdapter.handleStepChanged(0);
+        //stepsAdapter.handleStepChanged(0);
     }
 
     public void moveToStep() {
-        stepsAdapter.handleStepChanged(currentPosition);
+        //stepsAdapter.handleStepChanged(currentPosition);
     }
 
     public void setCurrentPosition(int position) {

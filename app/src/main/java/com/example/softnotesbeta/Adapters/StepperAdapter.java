@@ -1,40 +1,22 @@
 package com.example.softnotesbeta.Adapters;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
-import android.os.IBinder;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.TypeConverters;
 
-import com.example.softnotesbeta.Application.SoftScript.SoftScriptGenerator;
 import com.example.softnotesbeta.Application.SoftScript.SoftScriptReader;
-import com.example.softnotesbeta.Application.TaskService;
-import com.example.softnotesbeta.Models.SampleModel;
 import com.example.softnotesbeta.Models.Step;
 import com.example.softnotesbeta.R;
-import com.example.softnotesbeta.SampleListener;
 import com.example.softnotesbeta.StepperItemListener;
 
 import java.util.List;
@@ -81,21 +63,22 @@ public class StepperAdapter extends RecyclerView.Adapter<StepperAdapter.StepView
         holder.stepCounter.setText(String.valueOf(step.getStepIndex()));
         holder.stepTitle.setText(step.getName());
 
-        SoftScriptReader reader = new SoftScriptReader();
+        //SoftScriptReader reader = new SoftScriptReader();
 
+/*
         if (step.isDone()) {
             holder.stepTitle.setTextColor(completedColor);
-            /*
+
             Drawable backgroundDrawable = DrawableCompat.wrap(holder.stepCounter.getBackground()).mutate();
             DrawableCompat.setTint(backgroundDrawable, completedColor);
-             */
+
             holder.stepCounter.setBackground(context.getResources().getDrawable(R.drawable.step_check_disabled_suface));
         } else {
             holder.stepTitle.setTextColor(defaultTextColor);
-            /*
+
             Drawable backgroundDrawable = DrawableCompat.wrap(holder.stepCounter.getBackground()).mutate();
             DrawableCompat.setTint(backgroundDrawable, context.getResources().getColor(R.color.android_green));
-             */
+
             holder.stepCounter.setBackground(context.getResources().getDrawable(R.drawable.step_check_suface));
         }
 
@@ -108,6 +91,7 @@ public class StepperAdapter extends RecyclerView.Adapter<StepperAdapter.StepView
                 reader.setScript(script);
                 reader.readScript();
             }
+
 
             List<String> views = reader.getViews();
             List<String> values = reader.getValues();
@@ -127,17 +111,23 @@ public class StepperAdapter extends RecyclerView.Adapter<StepperAdapter.StepView
 
                         holder.startStopwatch(stopwatchValue);
                         break;
+
+
                 }
-            }
+
+
         } else {
             holder.stepActionsLayout.setVisibility(View.GONE);
         }
 
+ */
+
         holder.itemView.setOnClickListener(v -> {
             listener.onStepClicked(step, holder.getAdapterPosition());
 
-            handleStepChanged(holder.getAdapterPosition());
+            //handleStepChanged(holder.getAdapterPosition());
         });
+
     }
 
     public void handleStepChanged(int adapterPosition) {
@@ -183,11 +173,11 @@ public class StepperAdapter extends RecyclerView.Adapter<StepperAdapter.StepView
         AppCompatTextView stepCounter;
         AppCompatTextView stepTitle;
         ConstraintLayout stepLayout;
-        ConstraintLayout stepActionsLayout;
-        AppCompatTextView timerView;
-        AppCompatTextView stopwatchView;
-        AppCompatTextView stepStatusView;
-        AppCompatImageView timerPlayPauseBtn;
+        //ConstraintLayout stepActionsLayout;
+        //AppCompatTextView timerView;
+        //AppCompatTextView stopwatchView;
+        //AppCompatTextView stepStatusView;
+        // AppCompatImageView timerPlayPauseBtn;
         StepsExecuter executer;
 
         private static final String MILLIS_FORMAT = "%03d";
@@ -200,16 +190,17 @@ public class StepperAdapter extends RecyclerView.Adapter<StepperAdapter.StepView
             stepCounter = itemView.findViewById(R.id.step_count);
             stepTitle = itemView.findViewById(R.id.step_header);
             stepLayout = itemView.findViewById(R.id.parent_step);
-            stepActionsLayout = itemView.findViewById(R.id.step_actions_layout);
+            //stepActionsLayout = itemView.findViewById(R.id.step_actions_layout);
 
-            timerView = stepActionsLayout.findViewById(R.id.timer_tv);
-            stopwatchView = stepActionsLayout.findViewById(R.id.stopwatch_tv);
-            stepStatusView = stepActionsLayout.findViewById(R.id.step_status_tv);
-            timerPlayPauseBtn = stepActionsLayout.findViewById(R.id.action_timer_play_pause);
+            //timerView = stepActionsLayout.findViewById(R.id.timer_tv);
+            //stopwatchView = stepActionsLayout.findViewById(R.id.stopwatch_tv);
+            //stepStatusView = stepActionsLayout.findViewById(R.id.step_status_tv);
+            //timerPlayPauseBtn = stepActionsLayout.findViewById(R.id.action_timer_play_pause);
 
             executer = StepsExecuter.getInstance();
         }
 
+        /*
         public void startTimer(String value) {
             new CountDownTimer(MILLIS, 1) {
                 @Override
@@ -235,6 +226,8 @@ public class StepperAdapter extends RecyclerView.Adapter<StepperAdapter.StepView
         public void startStopwatch(String value) {
 
         }
+
+         */
     }
 
     public void moveToStep(int position) {

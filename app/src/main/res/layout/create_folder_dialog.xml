@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:background="?attr/background_color"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="200dp">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/folder_name_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:textSize="18sp"
+        android:hint="Folder name"
+        android:background="?attr/background_color"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/finish_folder"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="8dp"
+        android:background="@drawable/circular_background"
+        android:backgroundTint="?attr/foreground_color"
+        android:src="@drawable/icon_done"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@id/folder_name_et"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/cancel_folder"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="8dp"
+        android:background="@drawable/circular_background"
+        android:backgroundTint="?attr/foreground_color"
+        android:src="@drawable/icon_close"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@id/folder_name_et"
+        app:layout_constraintEnd_toStartOf="@id/finish_folder"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+       <KeyFrameSet>
+       </KeyFrameSet>
+        <OnSwipe
+            motion:touchAnchorId="@+id/exp_view"
+            motion:touchAnchorSide="top"
+            motion:dragDirection="dragUp"
+            motion:limitBoundsTo="@id/exp_view"/>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/end2"
+        motion:constraintSetStart="@id/start2"
+        motion:duration="1000">
+        <KeyFrameSet>
+        </KeyFrameSet>
+        <OnSwipe
+            motion:touchAnchorId="@+id/steps"
+            motion:touchAnchorSide="top"
+            motion:dragDirection="dragUp"
+            motion:limitBoundsTo="@id/steps"/>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/end2">
+        <Constraint
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="parent"/>
+
+        <Constraint
+            android:id="@+id/steps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="94dp"
+            android:layout_marginTop="12dp"
+            motion:layout_constraintTop_toTopOf="parent"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start2">
+        <Constraint
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            motion:layout_constraintTop_toTopOf="parent"/>
+
+        <Constraint
+            android:id="@+id/steps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="94dp"
+            android:layout_marginTop="250dp"
+            motion:layout_constraintTop_toTopOf="parent"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/dummy_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All Android apps use a main thread to handle UI operations. Calling long-running operations from this main thread can lead to freezes and unresponsiveness. For example, if your app makes a network request from the main thread, your app's UI is frozen until it receives the network response. If you use Java, you can create additional background threads to handle long-running operations while the main thread continues to handle UI updates."
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16sp"
+            android:lineSpacingExtra="8dp"
+            android:alpha="0"
+            android:padding="18dp"
+            android:textColor="?attr/title_text_color"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/exp_view"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/workspace_layer_surface"
+            android:backgroundTint="?attr/background_color"
+            motion:layout_constraintBottom_toBottomOf="parent"/>
+
+        <Constraint
+            android:id="@+id/steps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="524dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/workspace_layer_surface"
+            android:backgroundTint="?attr/background_color"
+            motion:layout_constraintBottom_toTopOf="@id/exp_view"/>
+
+        <Constraint
+            android:id="@+id/dummy_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All Android apps use a main thread to handle UI operations. Calling long-running operations from this main thread can lead to freezes and unresponsiveness. For example, if your app makes a network request from the main thread, your app's UI is frozen until it receives the network response. If you use Java, you can create additional background threads to handle long-running operations while the main thread continues to handle UI updates."
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16sp"
+            android:lineSpacingExtra="8dp"
+            android:alpha="1"
+            android:padding="18dp"
+            android:textColor="?attr/title_text_color"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="parent"/>
+    </ConstraintSet>
+</MotionScene>

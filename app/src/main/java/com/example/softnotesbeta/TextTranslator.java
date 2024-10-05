@@ -16,8 +16,8 @@ import com.google.mlkit.nl.translate.TranslatorOptions;
 
 public class TextTranslator {
 
-    private final String[] fromLanguages = {"From", "Arabic", "Bengali", "German", "English", "Hindi", "Gujarati", "Marathi", "Tamil", "Telugu", "Korean", "Urdu"};
-    private final String[] toLanguages = {"To", "Arabic", "Bengali", "German", "English", "Hindi", "Gujarati", "Marathi", "Tamil", "Telugu", "Korean", "Urdu"};
+    private final String[] fromLanguages = {"Arabic", "Bengali", "German", "English", "Hindi", "Gujarati", "Marathi", "Tamil", "Telugu", "Korean", "Urdu"};
+    private final String[] toLanguages = {"Arabic", "Bengali", "German", "English", "Hindi", "Gujarati", "Marathi", "Tamil", "Telugu", "Korean", "Urdu"};
     private String fromLanguage, toLanguage, fromLanguageCode, toLanguageCode;
     private String translatedText;
 
@@ -44,6 +44,7 @@ public class TextTranslator {
                     @Override
                     public void onSuccess(String s) {
                         NoteControllerHandler.getInstance().setTranslatedText(s);
+                        translatedText = s;
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -58,6 +59,10 @@ public class TextTranslator {
 
             }
         });
+    }
+
+    public String getTranslatedText() {
+        return this.translatedText;
     }
 
     public String getLanguageCode(String language) {
@@ -108,11 +113,11 @@ public class TextTranslator {
         return fromLanguages;
     }
 
-    public void setToLanguage(int position) {
-        this.toLanguage = toLanguages[position];
+    public void setToLanguage(String language) {
+        this.toLanguage = language;
     }
 
-    public void setFromLanguage(int position) {
-        this.fromLanguage = fromLanguages[position];
+    public void setFromLanguage(String language) {
+        this.fromLanguage = language;
     }
 }

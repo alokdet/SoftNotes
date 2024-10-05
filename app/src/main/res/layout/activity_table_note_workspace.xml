@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="?attr/background_color"
+    tools:context=".TableNoteWorkspace">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/background_color"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:collapsedTitleGravity="top|right"
+            app:collapsedTitleTextAppearance="@style/collapsed_title"
+            app:contentScrim="?attr/background_color"
+            app:elevation="0dp"
+            app:expandedTitleGravity="top|right"
+            app:expandedTitleMarginBottom="30dp"
+            app:expandedTitleMarginEnd="30dp"
+            app:expandedTitleMarginTop="50dp"
+            app:expandedTitleTextAppearance="@style/expanded_title"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:title="">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:elevation="0dp"
+                app:title=""
+                app:titleMarginEnd="30dp"
+                app:titleMarginTop="24dp"
+                app:titleTextAppearance="@style/collapsed_title"
+                app:titleTextColor="@color/black" />
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:elevation="0dp"
+                app:layout_collapseMode="pin">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/title_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginEnd="28dp"
+                    android:background="?attr/background_color"
+                    android:fontFamily="@font/roboto_thin"
+                    android:hint="Title"
+                    android:padding="10dp"
+                    android:textAlignment="center"
+                    android:textSize="42sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/foreground_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/table_foreground_layer_surface"
+        android:transitionName="actionBtn"
+        android:paddingBottom="24dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/date_time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="16th July, 2024"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/table_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fadeScrollbars="false"
+            android:paddingBottom="100dp"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+            android:scrollbars="vertical"
+            android:transitionName="steps_shared_list"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintTop_toBottomOf="@id/date_time_view" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/actions_two"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+        android:background="?attr/background_color">
+
+        <LinearLayout
+            android:id="@+id/top_jj"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:background="@drawable/bottom_sheet_top"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="horizontal" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/text_fields_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:paddingBottom="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/column_first_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="17sp"
+            android:hint="Column one"
+            android:background="?attr/background_color"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/column_two_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="17sp"
+            android:singleLine="true"
+            android:hint="Column two"
+            android:background="?attr/background_color"
+            android:padding="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@id/column_first_input"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/table_ops"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="100dp"
+            android:orientation="horizontal"
+            android:background="@drawable/table_bottom_layout_bg">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/operation_summation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="?attr/icon_tint"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/operation_percentage"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/icon_summation"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/operation_percentage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="?attr/icon_tint"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/operation_average"
+                app:layout_constraintStart_toEndOf="@id/operation_summation"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/icon_percent"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/operation_average"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="?attr/icon_tint"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/operation_percentage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/icon_bar_chart"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/close_fields_panel"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_close"
+            android:tint="?attr/icon_tint"
+            android:visibility="gone"
+            android:background="@drawable/xxxxxxxxxxxxxx"
+            android:backgroundTint="?attr/circular_background_tint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_fields_container"
+            android:layout_marginEnd="24dp" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/add_element"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:padding="18dp"
+            android:src="@drawable/icon_add"
+            android:background="@drawable/table_insert_widget_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/bottom_sheet_percentage"
+        layout="@layout/percentage_helper_bottom_sheet_behaviour"/>
+
+    <include
+        android:id="@+id/bottom_sheet_average"
+        layout="@layout/table_operation_result_bottom_sheet_behaviour"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

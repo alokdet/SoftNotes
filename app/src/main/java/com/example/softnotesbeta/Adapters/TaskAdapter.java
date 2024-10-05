@@ -17,17 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.softnotesbeta.Entities.Task;
 import com.example.softnotesbeta.OnTaskClickListener;
 import com.example.softnotesbeta.R;
+import com.example.softnotesbeta.TaskSelectionListener;
 
 public class TaskAdapter extends PagedListAdapter<Task, TaskAdapter.TaskViewHolder> {
 
     private Context context;
     private OnTaskClickListener listener;
+    private TaskSelectionListener selectionListener;
+    private boolean isSelected = false;
 
-    public TaskAdapter(Context context, OnTaskClickListener listener) {
+    public TaskAdapter(Context context, OnTaskClickListener listener, TaskSelectionListener selectionListener) {
         super(DIFF_CALLBACK);
 
         this.context = context;
         this.listener = listener;
+        this.selectionListener = selectionListener;
     }
 
     @NonNull
@@ -43,26 +47,22 @@ public class TaskAdapter extends PagedListAdapter<Task, TaskAdapter.TaskViewHold
 
         if (task != null) {
             holder.titleTv.setText(task.getTitle());
-            boolean expanded = task.isExpanded();
-            holder.subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean expanded = task.isExpanded();
-                task.setExpanded(!expanded);
-                notifyItemChanged(holder.getAdapterPosition());
+                listener.onTaskClicked(task, holder.getAdapterPosition(), holder.itemView, holder.checkTask, isSelected);
+            }
+        });
 
-                holder.stepView.setLayoutManager(new LinearLayoutManager(context));
-                holder.stepView.setAdapter(new StepsAdapter(task.getSteps(), context));
-
-                holder.checkTask.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listener.onTaskClicked(task);
-                    }
-                });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                isSelected = true;
+                selectionListener.onTaskSelected(holder.getAdapterPosition(), task, holder.itemView, holder.checkTask, isSelected);
+                return true;
             }
         });
     }
@@ -82,16 +82,17 @@ public class TaskAdapter extends PagedListAdapter<Task, TaskAdapter.TaskViewHold
     class TaskViewHolder extends RecyclerView.ViewHolder {
 
         private AppCompatTextView titleTv;
-        private ConstraintLayout subItem;
         private AppCompatImageView checkTask;
-        private RecyclerView stepView;
+       
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
             titleTv = (AppCompatTextView) itemView.findViewById(R.id.task_name);
-            subItem = (ConstraintLayout) itemView.findViewById(R.id.task_details_layout);
             checkTask = (AppCompatImageView) itemView.findViewById(R.id.check_task);
-            stepView = (RecyclerView) itemView.findViewById(R.id.steps_view);
         }
+    }
+
+    public void setSelection(boolean selection) {
+        this.isSelected = selection;
     }
 }

@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="background_color">@color/black</item>
-        <item name="foreground_color">#1C1C1C</item>
+        <item name="foreground_color">@color/dark_foreground</item>
         <item name="title_text_color">@color/white</item>
         <item name="sub_text_color">@android:color/tab_indicator_text</item>
         <item name="extra_text_color">#C6C6C6</item>
@@ -24,6 +24,7 @@
         <item name="icon_tint">#7A7A7A</item>
         <item name="select_tab_color">@color/black</item>
         <item name="disable_color">#353535</item>
+        <item name="circular_background_tint">#2B2A2A</item>
     </style>
 
     <style name="BottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">

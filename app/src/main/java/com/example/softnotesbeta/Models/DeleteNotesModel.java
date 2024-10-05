@@ -63,7 +63,7 @@ public class DeleteNotesModel {
 
             for (int i = 0; i < previewList.size(); i++) {
                 noteIds.add(previewList.get(i).getNoteId());
-                noteIds.add(previewList.get(i).getId());
+                previewIds.add(previewList.get(i).getId());
             }
 
             previewDao.deletePreviews(previewIds);

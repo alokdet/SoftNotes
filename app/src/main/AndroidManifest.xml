@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -22,14 +25,40 @@
         android:theme="@style/LightTheme.SoftNotesBeta"
         tools:targetApi="31">
         <activity
-            android:name=".PlannerWorkspace"
+            android:name=".IntroductionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TimelineWorkspace"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".TableNoteWorkspace"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".ContentViewer"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity3"
+            android:exported="false" />
+        <activity
+            android:name=".EXP"
+            android:exported="false"
+            android:label="@string/title_activity_exp"
+            android:theme="@style/LightTheme.SoftNotesBeta" />
+        <activity
+            android:name=".ContentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LauncherActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".TaskWorkspace"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity2"
             android:exported="false" />
@@ -38,7 +67,8 @@
             android:exported="false" />
         <activity
             android:name=".Workspace"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -74,8 +104,6 @@
 
         <service android:name=".Services.RescheduleRemindersService" />
         <service android:name=".Services.TaskReminderService" />
-        <service android:name=".Application.TaskService" />
-        <service android:name=".Application.NotesService" />
     </application>
 
 </manifest>

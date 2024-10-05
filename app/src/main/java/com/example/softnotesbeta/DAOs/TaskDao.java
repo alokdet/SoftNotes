@@ -17,6 +17,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks")
     DataSource.Factory<Integer, Task> getTasksPagedList();
 
+    @Query("SELECT * FROM tasks WHERE title LIKE :search ")
+    DataSource.Factory<Integer, Task> searchPreviews(String search);
+
     @Query("SELECT * FROM tasks WHERE id = :id")
     Task getTask(Long id);
 

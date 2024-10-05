@@ -5,7 +5,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.example.softnotesbeta.Models.Step;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +27,11 @@ public class Task {
     @ColumnInfo(name = "steps")
     public List<Step> steps;
 
-    private boolean isExpanded = false;
+    private boolean isSelected = false;
+
+    public Task() {
+
+    }
 
     public Task(String title, String dateCreated, String dueDate) {
         this.title = title;
@@ -48,12 +51,12 @@ public class Task {
         this.steps = steps;
     }
 
-    public boolean isExpanded() {
-        return isExpanded;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public void setExpanded(boolean expanded) {
-        isExpanded = expanded;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public String getDateCreated() {
@@ -93,11 +96,11 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task note = (Task) o;
-        return id == note.id && Objects.equals(title, note.title) && Objects.equals(dateCreated, note.dateCreated) && Objects.equals(dueDate, note.dueDate) && Objects.equals(steps, note.steps);
+        return id == note.id && Objects.equals(title, note.title) && Objects.equals(dateCreated, note.dateCreated) && Objects.equals(dueDate, note.dueDate) && Objects.equals(steps, note.steps) && Objects.equals(isSelected, note.isSelected);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, dateCreated, dueDate, steps);
+        return Objects.hash(id, title, dateCreated, dueDate, steps, isSelected);
     }
 }

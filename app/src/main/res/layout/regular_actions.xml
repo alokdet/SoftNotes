@@ -1,92 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="68dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="68dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/alignment"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/icon_format_align_left"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/translate"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="28dp"
-        app:tint="?attr/icon_tint"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/icon_tint" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/translate"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:src="@drawable/icon_translate"
-        app:layout_constraintTop_toTopOf="@id/alignment"
-        app:layout_constraintEnd_toStartOf="@id/paginate_note"
+        app:layout_constraintBottom_toBottomOf="@id/alignment"
+        app:layout_constraintEnd_toStartOf="@id/extract_text"
         app:layout_constraintStart_toEndOf="@id/alignment"
-        android:layout_marginStart="28dp"
-        app:tint="?attr/icon_tint"
-        app:layout_constraintBottom_toBottomOf="@id/alignment" />
+        app:layout_constraintTop_toTopOf="@id/alignment"
+        app:tint="?attr/icon_tint" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/paginate_note"
+        android:id="@+id/extract_text"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/icon_article"
-        app:layout_constraintTop_toTopOf="@id/alignment"
-        app:layout_constraintEnd_toStartOf="@id/attach_img"
-        app:layout_constraintStart_toEndOf="@id/translate"
-        android:layout_marginStart="28dp"
-        app:tint="?attr/icon_tint"
-        app:layout_constraintBottom_toBottomOf="@id/alignment" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/attach_img"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/icon_image"
-        app:layout_constraintTop_toTopOf="@id/alignment"
-        app:layout_constraintEnd_toStartOf="@id/floating_view"
-        app:layout_constraintStart_toEndOf="@id/paginate_note"
-        android:layout_marginStart="28dp"
-        app:tint="?attr/icon_tint"
-        app:layout_constraintBottom_toBottomOf="@id/alignment" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/floating_view"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/baseline_fullscreen_exit_24"
-        app:layout_constraintTop_toTopOf="@id/alignment"
+        android:src="@drawable/icon_camera"
+        app:layout_constraintBottom_toBottomOf="@id/alignment"
         app:layout_constraintEnd_toStartOf="@id/action_tts"
-        app:layout_constraintStart_toEndOf="@id/attach_img"
-        android:layout_marginStart="28dp"
-        app:tint="?attr/icon_tint"
-        app:layout_constraintBottom_toBottomOf="@id/alignment" />
+        app:layout_constraintStart_toEndOf="@id/translate"
+        app:layout_constraintTop_toTopOf="@id/alignment"
+        app:tint="?attr/icon_tint" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/action_tts"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:src="@drawable/baseline_keyboard_voice_24"
+        app:layout_constraintBottom_toBottomOf="@id/alignment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/extract_text"
         app:layout_constraintTop_toTopOf="@id/alignment"
-        app:layout_constraintStart_toEndOf="@id/floating_view"
-        android:layout_marginStart="28dp"
-        app:tint="?attr/icon_tint"
-        app:layout_constraintBottom_toBottomOf="@id/alignment" />
+        app:tint="?attr/icon_tint" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/save_note"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:src="@drawable/icon_done"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/action_done_bg"
         android:padding="12dp"
-        app:tint="?attr/icon_tint"
+        android:src="@drawable/icon_done"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:tint="?attr/icon_tint" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

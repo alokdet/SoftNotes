@@ -51,6 +51,7 @@
         app:layout_constraintTop_toTopOf="@id/step_count"
         app:layout_constraintBottom_toBottomOf="@id/step_count"/>
 
+    <!--
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/step_actions_layout"
         android:layout_width="match_parent"
@@ -164,5 +165,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

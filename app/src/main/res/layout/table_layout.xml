@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="18dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1."
+        android:singleLine="true"
+        android:maxLength="3"
+        android:textSize="18sp"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="?attr/title_text_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_marginStart="24dp"
+        android:textColor="?attr/title_text_color"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Long key text for testing"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/index" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="?attr/title_text_color"
+        android:fontFamily="@font/roboto_regular"
+        android:text="30000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="?attr/background_color"
+        app:layout_constraintTop_toBottomOf="@id/key"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

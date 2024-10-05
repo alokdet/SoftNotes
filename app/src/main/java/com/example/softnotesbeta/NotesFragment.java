@@ -31,7 +31,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesFragment extends Fragment implements NoteItemClickListener, OnSelectionStart, SearchNotesModel.TextChangeListener, DeleteNotesModel.OnDeleteRequest {
+public class NotesFragment extends Fragment implements NoteItemClickListener, OnSelectionStart, SearchNotesModel.TextChangeListener, DeleteNotesModel.OnDeleteRequest, MainActivity.ParentChangedListener {
 
     private static final int spanCount = 2;
     private static final int spacing = 38;
@@ -46,6 +46,14 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
 
     public NotesFragment() {
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setParentListener(this);
     }
 
     @Override
@@ -69,7 +77,7 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
 
         selectedNotes = new ArrayList<>();
 
-        viewModel.initAllPreviews();
+        viewModel.initAllPreviews("");
         viewModel.allPreviewList.observe(getViewLifecycleOwner(), previews -> {
             adapter.submitList(previews);
         });
@@ -106,15 +114,40 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
             }
 
         } else {
-            Intent intent = new Intent(getContext(), Workspace.class);
-            intent.putExtra("transitionName1", ViewCompat.getTransitionName(view1));
-            intent.putExtra("title", preview.getTitle());
-            intent.putExtra("noteId", preview.getNoteId());
-            intent.putExtra("previewId", preview.getId());
-            intent.putExtra("mode", "updateAndView");
+            if (preview.getType().equals("table")) {
+                Intent intent = new Intent(getContext(), TableNoteWorkspace.class);
+                intent.putExtra("transitionName1", ViewCompat.getTransitionName(view1));
+                intent.putExtra("title", preview.getTitle());
+                intent.putExtra("noteId", preview.getNoteId());
+                intent.putExtra("previewId", preview.getId());
+                intent.putExtra("mode", "updateAndView");
+                intent.putExtra("noteType", preview.getType());
 
-            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view1, ViewCompat.getTransitionName(view1));
-            startActivity(intent, activityOptions.toBundle());
+                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view1, ViewCompat.getTransitionName(view1));
+                startActivity(intent, activityOptions.toBundle());
+            } else if (preview.getType().equals("timeline")) {
+                Intent intent = new Intent(getContext(), TimelineWorkspace.class);
+                intent.putExtra("transitionName1", ViewCompat.getTransitionName(view1));
+                intent.putExtra("title", preview.getTitle());
+                intent.putExtra("noteId", preview.getNoteId());
+                intent.putExtra("previewId", preview.getId());
+                intent.putExtra("mode", "updateAndView");
+                intent.putExtra("noteType", preview.getType());
+
+                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view1, ViewCompat.getTransitionName(view1));
+                startActivity(intent, activityOptions.toBundle());
+            }else {
+                Intent intent = new Intent(getContext(), Workspace.class);
+                intent.putExtra("transitionName1", ViewCompat.getTransitionName(view1));
+                intent.putExtra("title", preview.getTitle());
+                intent.putExtra("noteId", preview.getNoteId());
+                intent.putExtra("previewId", preview.getId());
+                intent.putExtra("mode", "updateAndView");
+                intent.putExtra("noteType", preview.getType());
+
+                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view1, ViewCompat.getTransitionName(view1));
+                startActivity(intent, activityOptions.toBundle());
+            }
         }
     }
 
@@ -138,5 +171,10 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
     @Override
     public void onDeleteRequest() {
         DeleteNotesModel.getInstance().setItemsToDelete(selectedNotes);
+    }
+
+    @Override
+    public void onParentChanged(String parent) {
+
     }
 }

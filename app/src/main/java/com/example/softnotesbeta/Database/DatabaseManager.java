@@ -36,10 +36,6 @@ public class DatabaseManager {
         }
     }
 
-    public DataSource.Factory<Integer, Preview> getAllPreviews() {
-        return previewDao.getPreviewsPagedList();
-    }
-
     public DataSource.Factory<Integer, Preview> getSearchedPreviews(String searchQuery) {
         return previewDao.searchPreviews(searchQuery);
     }

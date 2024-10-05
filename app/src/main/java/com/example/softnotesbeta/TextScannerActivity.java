@@ -1,6 +1,9 @@
 package com.example.softnotesbeta;
 
+import static android.Manifest.permission.CAMERA;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,6 +18,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +31,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.softnotesbeta.Adapters.ImageAdapter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +44,9 @@ public class TextScannerActivity extends AppCompatActivity implements ImageItemC
     private static final boolean includeEdge = true;
 
     private static final int READ_PERMISSION = 10;
+    private static final int PERMISSION_CODE = 200;
+    private static final int REQUEST_IMAGE_CAPTURE = 300;
+    //private boolean imageCaptured = false;
     private AppCompatImageView actionAddImage;
     private RecyclerView imageGrid;
 
@@ -74,10 +83,37 @@ public class TextScannerActivity extends AppCompatActivity implements ImageItemC
         actionAddImage = (AppCompatImageView) findViewById(R.id.image_to_scan);
         imageGrid = (RecyclerView) findViewById(R.id.images_grid);
 
-        if (ContextCompat.checkSelfPermission(TextScannerActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(TextScannerActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_PERMISSION);
+        if (ContextCompat.checkSelfPermission(TextScannerActivity.this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(TextScannerActivity.this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, READ_PERMISSION);
         } else {
             loadImages();
+        }
+
+        actionAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermission()) {
+                    captureImage();
+                } else {
+                    requestPermission();
+                }
+            }
+        });
+    }
+
+    private boolean checkPermission() {
+        int cameraPermission = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        return cameraPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, PERMISSION_CODE);
+    }
+
+    private void captureImage() {
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePicture.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
         }
     }
 
@@ -105,7 +141,8 @@ public class TextScannerActivity extends AppCompatActivity implements ImageItemC
 
         while (cursor.moveToNext()) {
             absoluteImagePath = cursor.getString(columnIndexData);
-            imageLists.add(absoluteImagePath);
+            Uri uri1 = Uri.fromFile(new File(absoluteImagePath));
+            imageLists.add(uri1.toString());
         }
         return imageLists;
     }
@@ -134,5 +171,26 @@ public class TextScannerActivity extends AppCompatActivity implements ImageItemC
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Uri imageUri = getImageUri(photo);
+            Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+            intent.putExtra("imagePath", imageUri.toString());
+            startActivity(intent);
+
+        }
+    }
+
+    private Uri getImageUri(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "TITLE", null);
+        return Uri.parse(path);
     }
 }

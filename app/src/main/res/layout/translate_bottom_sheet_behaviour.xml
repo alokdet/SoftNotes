@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:background="?attr/background_color"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="200dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@drawable/bottom_sheet_top"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/translate_btn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:src="@drawable/icon_done"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:background="@drawable/note_preview_background"
+        android:backgroundTint="@color/android_green"
+        app:layout_constraintTop_toBottomOf="@id/top_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/close_translation_panel"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/circular_background"
+        android:padding="5dp"
+        android:src="@drawable/icon_close"
+        android:backgroundTint="?attr/foreground_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/translate_btn"
+        app:layout_constraintTop_toTopOf="@id/translate_btn"
+        app:layout_constraintBottom_toBottomOf="@id/translate_btn"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/available_languages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/translate_btn"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

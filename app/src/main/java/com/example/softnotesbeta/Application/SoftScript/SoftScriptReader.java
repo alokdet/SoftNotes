@@ -6,54 +6,56 @@ import java.util.List;
 public class SoftScriptReader {
 
     private String script;
-    private List<String> views;
+    private int rowIndex = -1;
+    private List<String> nodes;
     private List<String> values;
-    private int insertMode = 0;
+    private List<String> rows;
 
     public SoftScriptReader() {
-        views = new ArrayList<>();
+        rows = new ArrayList<>();
+        nodes = new ArrayList<>();
         values = new ArrayList<>();
     }
 
     public void readScript() {
-        StringBuilder sequence = new StringBuilder();
+        StringBuilder row = new StringBuilder();
+        StringBuilder node = new StringBuilder();
+        StringBuilder value = new StringBuilder();
 
         for (int i = 0; i < script.length(); i++) {
             char character = script.charAt(i);
 
-            sequence.append(character);
-
             switch (character) {
-                case ':':
-                case 'x':
-                    insertMode = 0;
-                    sequence.delete(0, sequence.length());
+                case '[':
+                    rowIndex++;
                     break;
                 case '=':
-                    insertMode = 1;
-                    sequence.delete(0, sequence.length());
+                    nodes.add(node.toString());
+                    node.delete(0, node.length());
                     break;
-                case '-':
-                    insertMode = 0;
-                    views.add(sequence.toString().substring(0, sequence.length() - 1));
-                    sequence.delete(0, sequence.length());
+                case ']':
+                    rows.add(row.toString());
+                    row.delete(0, row.length());
+                    values.add(value.toString());
+                    value.delete(0, value.length());
                     break;
-                case ' ':
-                    if (sequence.charAt(0) == 'x') {
-                        insertMode = 0;
-                        sequence.delete(0, sequence.length());
+                default:
+                    if (row.toString().contains("=")) {
+                        value.append(character);
                     } else {
-                        insertMode = 1;
-                        values.add(sequence.toString());
-                        sequence.delete(0, sequence.length());
+                        node.append(character);
                     }
-                    break;
             }
+            row.append(character);
         }
     }
 
-    public List<String> getViews() {
-        return this.views;
+    public List<String> getRows() {
+        return rows;
+    }
+
+    public List<String> getNodes() {
+        return this.nodes;
     }
 
     public List<String> getValues() {

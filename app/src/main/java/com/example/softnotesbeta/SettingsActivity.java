@@ -1,6 +1,7 @@
 package com.example.softnotesbeta;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Configuration;
@@ -9,6 +10,11 @@ import android.os.Bundle;
 import android.transition.Fade;
 import android.view.View;
 import android.view.Window;
+
+import com.example.softnotesbeta.Models.SettingsModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -44,6 +50,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        recyclerView = (RecyclerView) findViewById(R.id.settings_items);
+        recyclerView = (RecyclerView) findViewById(R.id.rv);
+
+        List<SettingsModel> list = new ArrayList<>();
+
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+       // recyclerView.setAdapter(new SubFoldersAdapter(list));
     }
 }

@@ -14,6 +14,17 @@
         android:layout_height="wrap_content"/>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/translation_indic"
+        android:text="22 April 2023"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/note_scroll_view"
+        app:layout_constraintStart_toStartOf="@id/note_scroll_view"
+        app:layout_constraintEnd_toEndOf="@id/note_scroll_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/page_number_tv"
         android:text="/"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,6 +41,13 @@
         android:visibility="gone"
         android:layout_marginTop="50dp"/>
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/translate_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:visibility="gone"/>
+
     <ScrollView
         android:id="@+id/note_scroll_view"
         android:layout_width="match_parent"
@@ -39,16 +57,35 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="25dp">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/input_note"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Type Note"
-            android:textColor="?attr/sub_text_color"
-            android:background="?attr/foreground_color"
-            android:fontFamily="@font/roboto_light"
-            android:lineSpacingExtra="8dp"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/input_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type Note"
+                android:textColor="?attr/title_text_color"
+                android:background="?attr/foreground_color"
+                android:fontFamily="@font/roboto_light"
+                android:lineSpacingExtra="8dp"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_for_tts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type Note"
+                android:textColor="?attr/sub_text_color"
+                android:background="?attr/foreground_color"
+                android:fontFamily="@font/roboto_light"
+                android:lineSpacingExtra="8dp"
+                android:textSize="18sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
     </ScrollView>
 

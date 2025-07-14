@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -23,7 +24,10 @@ import android.view.ViewGroup;
 import com.example.softnotesbeta.Adapters.NoteAdapter;
 import com.example.softnotesbeta.Entities.Preview;
 import com.example.softnotesbeta.Models.DeleteNotesModel;
+import com.example.softnotesbeta.Models.NotifySelectionModel;
+import com.example.softnotesbeta.Models.SearchInvokedModel;
 import com.example.softnotesbeta.Models.SearchNotesModel;
+import com.example.softnotesbeta.Models.SelectBackModel;
 import com.example.softnotesbeta.ViewModels.NotesVIewModel;
 import com.example.softnotesbeta.ViewModels.SearchVIewModel;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -31,7 +35,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesFragment extends Fragment implements NoteItemClickListener, OnSelectionStart, SearchNotesModel.TextChangeListener, DeleteNotesModel.OnDeleteRequest, MainActivity.ParentChangedListener {
+public class NotesFragment extends Fragment implements NoteItemClickListener, OnSelectionStart, SearchNotesModel.TextChangeListener, DeleteNotesModel.OnDeleteRequest, MainActivity.ParentChangedListener, SearchInvokedModel.OnSearchRequest, SelectBackModel.NoteBackRequest {
 
     private static final int spanCount = 2;
     private static final int spacing = 38;
@@ -42,6 +46,7 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
     private CollapsingToolbarLayout toolbarLayout;
     private NotesVIewModel viewModel;
     private NoteAdapter adapter;
+    StaggeredGridLayoutManager layoutManager;
     private List<Preview> selectedNotes;
 
     public NotesFragment() {
@@ -69,6 +74,8 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
 
         SearchNotesModel.getInstance().setListener(this::onFilterText);
         DeleteNotesModel.getInstance().setListener(this::onDeleteRequest);
+        SearchInvokedModel.getInstance().setListener(this::onSearchRequest);
+        SelectBackModel.getInstance().setNoteListener(this::onNoteBackRequest);
         recyclerView = (RecyclerView) view.findViewById(R.id.notes_list);
         toolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar);
 
@@ -82,7 +89,8 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
             adapter.submitList(previews);
         });
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
 
@@ -98,6 +106,11 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
                 view1.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.note_preview_background));
 
                 preview.setSelected(false);
+                if (selectedNotes.isEmpty()) {
+                    adapter.setSelected(false);
+                    toolbarLayout.setTitle("Tasks");
+                    NotifySelectionModel.getInstance().selectChanged(false);
+                }
 
                 selectedNotes.remove(preview);
                 toolbarLayout.setTitle(selectedNotes.size() + " selected");
@@ -155,10 +168,12 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
     public void performActions(boolean isSelected) {
         if (isSelected) {
             getActivity().findViewById(R.id.delete_action).setVisibility(View.VISIBLE);
+            NotifySelectionModel.getInstance().selectChanged(true);
             //vibrate();
             toolbarLayout.setTitle(String.valueOf(selectedNotes.size()) + " selected");
         } else {
             getActivity().findViewById(R.id.delete_action).setVisibility(View.GONE);
+            NotifySelectionModel.getInstance().selectChanged(false);
             toolbarLayout.setTitle("Notes");
         }
     }
@@ -171,10 +186,37 @@ public class NotesFragment extends Fragment implements NoteItemClickListener, On
     @Override
     public void onDeleteRequest() {
         DeleteNotesModel.getInstance().setItemsToDelete(selectedNotes);
+        toolbarLayout.setTitle("Notes");
+        adapter.setSelected(false);
+        selectedNotes.clear();
+        getActivity().findViewById(R.id.delete_action).setVisibility(View.GONE);
     }
 
     @Override
     public void onParentChanged(String parent) {
 
+    }
+
+    @Override
+    public void onSearchRequest() {
+        Intent intent = new Intent(getContext(), SearchActivity.class);
+        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), recyclerView, ViewCompat.getTransitionName(recyclerView));
+        startActivity(intent, activityOptions.toBundle());
+    }
+
+    @Override
+    public void onNoteBackRequest() {
+        recyclerView.setAdapter(null);
+        recyclerView.setLayoutManager(null);
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter.notifyDataSetChanged();
+
+        toolbarLayout.setTitle("Notes");
+        adapter.setSelected(false);
+        selectedNotes.clear();
+
+        getActivity().findViewById(R.id.delete_action).setVisibility(View.GONE);
     }
 }

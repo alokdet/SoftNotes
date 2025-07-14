@@ -25,49 +25,71 @@
         android:theme="@style/LightTheme.SoftNotesBeta"
         tools:targetApi="31">
         <activity
-            android:name=".IntroductionActivity"
+            android:name=".SoftWorkspace"
             android:exported="false" />
+        <activity
+            android:name=".TasksSearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".IntroductionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TimelineWorkspace"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".TableNoteWorkspace"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ContentViewer"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity3"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EXP"
             android:exported="false"
             android:label="@string/title_activity_exp"
+            android:screenOrientation="portrait"
             android:theme="@style/LightTheme.SoftNotesBeta" />
         <activity
             android:name=".ContentActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LauncherActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TaskWorkspace"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity2"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TextScannerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Workspace"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -79,7 +101,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

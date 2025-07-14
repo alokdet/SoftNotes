@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="0 chars \n0 lines"
         android:layout_marginStart="24dp"
+        android:textColor="?attr/sub_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -23,8 +24,8 @@
         android:fontFamily="@font/roboto_thin"
         android:transitionName="title_text"
         android:singleLine="true"
-        android:hint="Title"
         android:textSize="28sp"
+        android:hint="Title"
         android:background="?attr/background_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

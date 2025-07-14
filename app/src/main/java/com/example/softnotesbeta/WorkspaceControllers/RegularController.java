@@ -154,7 +154,7 @@ public class RegularController implements SaveNoteModel.OnBackPressed, TextToSpe
                 previewDao.insertNoteToDatabase(preview);
                 break;
             case "list":
-                preview = new Preview(id, handler.getTitle(), makeListPreview(handler.getList()).toString(), handler.getDate(), handler.getNoteType());
+                preview = new Preview(id, handler.getTitle(), "List", handler.getDate(), handler.getNoteType());
                 previewDao.insertNoteToDatabase(preview);
                 break;
             case "image":

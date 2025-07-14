@@ -53,24 +53,19 @@
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/input_task_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="28dp"
                     android:layout_marginEnd="28dp"
                     android:layout_marginBottom="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="28dp"
                     android:textAlignment="center"
-                    android:background="@drawable/note_preview_background"
-                    android:backgroundTint="@color/android_green"
+                    android:maxLength="45"
+                    android:background="@drawable/workspace_layer_surface"
+                    android:backgroundTint="?attr/foreground_color"
                     android:fontFamily="@font/roboto_thin"
                     android:hint="Title"
                     android:padding="10dp"
                     android:textSize="35sp" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/action_undo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/icon_undo" />
 
             </LinearLayout>
 
@@ -83,6 +78,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/steps_viewer"
@@ -107,6 +104,7 @@
             android:layout_height="25dp"
             android:src="@drawable/icon_menu"
             app:tint="?attr/icon_tint"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/action_btn"
             app:layout_constraintBottom_toBottomOf="@id/action_btn"
             app:layout_constraintStart_toStartOf="parent"
@@ -174,11 +172,41 @@
             android:layout_height="25dp"
             android:src="@drawable/icon_timer"
             app:tint="?attr/icon_tint"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/action_btn"
             app:layout_constraintBottom_toBottomOf="@id/action_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/action_btn"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/emptyOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Empty"
+        android:textColor="?attr/sub_text_color"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/emptyTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click on + to add steps"
+        android:textColor="?attr/sub_text_color"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/roboto_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

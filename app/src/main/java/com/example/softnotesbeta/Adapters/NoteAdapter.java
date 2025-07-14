@@ -94,7 +94,9 @@ public class NoteAdapter extends PagedListAdapter<Preview, NoteAdapter.NoteViewH
         noteViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                isSelected = !isSelected;
+                if (!isSelected) {
+                    isSelected = true;
+                }
                 selectionStart.performActions(isSelected);
                 clickListener.onPreviewCLick(noteViewHolder.getAdapterPosition(), note, noteViewHolder.item_layout, noteViewHolder.select_icon, isSelected);
                 return true;
@@ -147,5 +149,9 @@ public class NoteAdapter extends PagedListAdapter<Preview, NoteAdapter.NoteViewH
             spannableStringBuilder.append(spannable);
         }
         return spannableStringBuilder;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 }

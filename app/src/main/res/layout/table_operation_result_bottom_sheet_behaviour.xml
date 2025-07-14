@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/bottom_sheet_dia"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="24dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/workspace_layer_surface"
+    android:backgroundTint="?attr/background_color"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    android:background="?attr/background_color"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="200dp">
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/top_layout"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@drawable/bottom_sheet_top"
-        app:layout_constraintTop_toTopOf="parent"/>
+    app:behavior_peekHeight="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bs_cont"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="54dp"
-        android:backgroundTint="@color/android_green"
-        android:background="@drawable/foreground_layer_surface"
-        app:layout_constraintTop_toBottomOf="@id/top_layout">
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="50dp">
 
         <View
             android:id="@+id/scroll_handle"
@@ -53,12 +50,12 @@
             android:text="KEY"
             android:textSize="16sp"
             android:padding="10dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="30dp"
             android:textColor="@color/white"
             android:background="@drawable/xxxxxxxxxxxxxx"
             android:backgroundTint="@color/onBackground_light"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/top_text"/>
+            app:layout_constraintTop_toBottomOf="@id/top_text"
+            app:layout_constraintStart_toStartOf="@id/result" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/value_column"
@@ -73,6 +70,19 @@
             app:layout_constraintTop_toTopOf="@id/key_column"
             app:layout_constraintStart_toEndOf="@id/key_column"/>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="42sp"
+            android:fontFamily="@font/roboto_thin"
+            android:layout_marginTop="30dp"
+            android:textColor="?attr/title_text_color"
+            app:layout_constraintTop_toBottomOf="@id/key_column"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/close_result_panel"
             android:layout_width="50dp"
@@ -85,19 +95,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="24dp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="112.34"
-            android:textSize="42sp"
-            android:layout_marginEnd="24dp"
-            android:fontFamily="@font/roboto_thin"
-            android:layout_marginBottom="24dp"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

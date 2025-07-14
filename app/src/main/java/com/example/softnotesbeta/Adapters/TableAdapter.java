@@ -49,19 +49,16 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
-        if (showIndex) {
-            holder.displayIndex.setVisibility(View.VISIBLE);
-            holder.displayIndex.setText(indexList.get(position).getText());
-        } else {
-            holder.displayIndex.setVisibility(View.GONE);
-        }
-        holder.displayKey.setText(keyList.get(position).getText());
-        holder.displayValue.setText(valueList.get(position).getText());
+
+        holder.displayIndex.setVisibility(View.GONE);
+
+        holder.displayKey.setText(keyList.get(position).getStringText());
+        holder.displayValue.setText(valueList.get(position).getStringText());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onClick(holder.getAdapterPosition(), keyList.get(holder.getAdapterPosition()).getText(), valueList.get(holder.getAdapterPosition()).getText());
+                listener.onClick(holder.getAdapterPosition(), keyList.get(holder.getAdapterPosition()).getStringText(), valueList.get(holder.getAdapterPosition()).getStringText());
             }
         });
     }
@@ -76,6 +73,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         AppCompatTextView displayIndex;
         AppCompatTextView displayKey;
         AppCompatTextView displayValue;
+
         public TableViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -86,7 +84,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
     public void removeItem(int position) {
-        itemRemovedListener.onItemRemoved(position, keyList.get(position).getText(), valueList.get(position).getText());
+        itemRemovedListener.onItemRemoved(position, keyList.get(position).getStringText(), valueList.get(position).getStringText());
         indexList.remove(position);
         keyList.remove(position);
         valueList.remove(position);

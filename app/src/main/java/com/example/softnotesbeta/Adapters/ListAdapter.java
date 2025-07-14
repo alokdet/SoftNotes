@@ -1,6 +1,10 @@
 package com.example.softnotesbeta.Adapters;
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +47,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
     public void onBindViewHolder(@NonNull ListItemViewHolder holder, int position) {
         holder.checkItem.setText(itemsList.get(position).getText());
         holder.checkItem.setChecked(itemsList.get(position).isChecked());
+//        if (holder.checkItem.isChecked()) {
+//            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(itemsList.get(position).getText());
+//            spannableStringBuilder.setSpan(new StrikethroughSpan(), 0, spannableStringBuilder.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//            holder.checkItem.setText(spannableStringBuilder);
+//        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +59,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
                 listener.onClick(holder.getAdapterPosition(), itemsList.get(holder.getAdapterPosition()).getText(), holder.checkItem.isChecked());
             }
         });
+
 
         holder.checkItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -59,7 +69,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
                         holder.checkItem.setChecked(false);
                     } else {
                         itemsList.get(holder.getAdapterPosition()).setChecked(b);
+//                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(itemsList.get(holder.getAdapterPosition()).getText());
+//                        stringBuilder.setSpan(new StrikethroughSpan(), 0, stringBuilder.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                        holder.checkItem.setText(stringBuilder);
                     }
+                } else {
+//                    Spannable spannable = itemsList.get(holder.getAdapterPosition()).getSpannedText();
+//                    Object spanToRemove[] = spannable.getSpans(0, spannable.length(), Object.class);
+//                    for (Object span : spanToRemove) {
+//                        if (span instanceof StrikethroughSpan) {
+//                            spannable.removeSpan(span);
+//                        }
+//                    }
                 }
                 listener.onClick(holder.getAdapterPosition(), itemsList.get(holder.getAdapterPosition()).getText(), holder.checkItem.isChecked());
             }

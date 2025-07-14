@@ -6,6 +6,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
@@ -39,6 +41,8 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,6 +72,11 @@ import com.example.softnotesbeta.Models.TaskExitedModel;
 import com.example.softnotesbeta.ViewModels.FoldersViewModel;
 import com.example.softnotesbeta.ViewModels.StepsViewModel;
 import com.example.softnotesbeta.ViewModels.StepsViewModelFactory;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -77,9 +86,12 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class CreateTaskFragment extends Fragment implements StepAndContentModel.ContentCreatedListener, StepCLickListener, StepDeletedListener, StepUpdateRequest {
@@ -97,9 +109,10 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
     private AppCompatImageView timerBtn;
     private AppCompatImageView speechBtn;
     private AppCompatImageView taskSettingsBtn;
-    private AppCompatImageView actionUndo;
     private ConstraintLayout actionBtn;
     private AppCompatImageView mainBtn;
+    private AppCompatTextView emptyOne;
+    private AppCompatTextView emptyTwo;
     private TaskDao taskDao;
     private StepDao stepDao;
     private Task currentTask;
@@ -147,11 +160,12 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
         //mainBtn = (AppCompatImageView) view.findViewById(R.id.main_btn);
         actionCreateTask = (AppCompatImageView) view.findViewById(R.id.add_step);
         taskSettingsBtn = (AppCompatImageView) view.findViewById(R.id.task_settings);
-        actionUndo = (AppCompatImageView) view.findViewById(R.id.action_undo);
         timerBtn = (AppCompatImageView) view.findViewById(R.id.task_timer);
         actionCloseInput = (AppCompatImageView) view.findViewById(R.id.close_input);
         //speechBtn = (AppCompatImageView) view.findViewById(R.id.speech);
         parent = (CoordinatorLayout) view.findViewById(R.id.parent_step_workspace);
+        emptyOne = (AppCompatTextView) view.findViewById(R.id.emptyOne);
+        emptyTwo = (AppCompatTextView) view.findViewById(R.id.emptyTwo);
         recyclerView = (RecyclerView) view.findViewById(R.id.steps_viewer);
         actionBtn = (ConstraintLayout) view.findViewById(R.id.action_btn);
 
@@ -185,6 +199,12 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        if (steps.isEmpty()) {
+            emptyTwo.setVisibility(View.VISIBLE);
+            emptyOne.setVisibility(View.VISIBLE);
+        }
+
+
         actionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,10 +216,22 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
             }
         });
 
-        actionUndo.setOnClickListener(new View.OnClickListener() {
+        inputTitle.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                undo();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length()==44) {
+                    Toast.makeText(getContext(), "Maximum length title is 45 chars", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -223,6 +255,8 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
                         recyclerView.scrollToPosition(steps.size() - 1);
                         inputStep.setText("");
                     }
+                    emptyTwo.setVisibility(View.GONE);
+                    emptyOne.setVisibility(View.GONE);
                 }
             }
         });
@@ -305,11 +339,20 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        if (steps.isEmpty()) {
+            emptyOne.setVisibility(View.VISIBLE);
+            emptyTwo.setVisibility(View.VISIBLE);
+        } else {
+            emptyOne.setVisibility(View.GONE);
+            emptyTwo.setVisibility(View.GONE);
+        }
     }
 
     private void saveTask(String title) {
 
-        Task task = new Task(title, "Wednesday, May 24", "Friday, May 25");
+        String date = new android.icu.text.SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date());
+        Task task = new Task(title, date, "Friday, May 25");
         task.setSteps(steps);
         long taskId = taskDao.insertTaskToDatabase(task);
 
@@ -413,8 +456,8 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
         widthAnimation.start();
 
         //actionCreateTask.setBackground(null);
-        timerBtn.setVisibility(View.VISIBLE);
-        taskSettingsBtn.setVisibility(View.VISIBLE);
+//        timerBtn.setVisibility(View.VISIBLE);
+//        taskSettingsBtn.setVisibility(View.VISIBLE);
         isCircle = true;
     }
 
@@ -426,16 +469,16 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
 
-        ValueAnimator animator = ValueAnimator.ofInt(actionBtn.getMeasuredWidth(), (width-dpToPixels(48)));
+        ValueAnimator animator = ValueAnimator.ofInt(actionBtn.getMeasuredWidth(), (width - dpToPixels(48)));
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                        int val = (Integer) valueAnimator.getAnimatedValue();
-                        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) actionBtn.getLayoutParams();
-                        params.width = val;
-                        actionBtn.setLayoutParams(params);
-                    }
-                });
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) actionBtn.getLayoutParams();
+                params.width = val;
+                actionBtn.setLayoutParams(params);
+            }
+        });
         animator.setDuration(500);
         animator.start();
 
@@ -498,6 +541,10 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
         this.deletedSteps.add(steps.get(position));
         steps.remove(position);
         stepAdapter.notifyItemRemoved(position);
+        if (steps.isEmpty()) {
+            emptyTwo.setVisibility(View.VISIBLE);
+            emptyOne.setVisibility(View.VISIBLE);
+        }
     }
 
     private void undo() {
@@ -536,14 +583,33 @@ public class CreateTaskFragment extends Fragment implements StepAndContentModel.
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        TimePickerDialog dialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build();
+        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                setTimeDelay(((calendar.getTimeInMillis()/1000L)-(Calendar.getInstance().getTimeInMillis()/1000L)));
+            public void onPositiveButtonClick(Long aLong) {
+                String date = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date(aLong));
             }
-        }, hour, minute, false);
+        });
+        datePicker.show(getActivity().getSupportFragmentManager(), "tag");
 
-        dialog.show();
+        MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_12H)
+                .setHour(12)
+                .setMinute(0)
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setTitleText("Pick Time")
+                .build();
+        timePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+       // dialog.show();
 //        if (0 <1){
 //            Toast.makeText(getContext(), "Can't set reminders for past", Toast.LENGTH_SHORT).show();
 //        } else {

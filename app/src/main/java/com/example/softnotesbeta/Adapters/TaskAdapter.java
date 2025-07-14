@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,7 +48,8 @@ public class TaskAdapter extends PagedListAdapter<Task, TaskAdapter.TaskViewHold
 
         if (task != null) {
             holder.titleTv.setText(task.getTitle());
-
+            holder.taskDate.setText(task.getDateCreated());
+            ViewCompat.setTransitionName(holder.itemView, String.valueOf(task.id));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -82,15 +84,19 @@ public class TaskAdapter extends PagedListAdapter<Task, TaskAdapter.TaskViewHold
     class TaskViewHolder extends RecyclerView.ViewHolder {
 
         private AppCompatTextView titleTv;
+        private AppCompatTextView taskDate;
         private AppCompatImageView checkTask;
        
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
             titleTv = (AppCompatTextView) itemView.findViewById(R.id.task_name);
+            taskDate = (AppCompatTextView) itemView.findViewById(R.id.task_created_tv);
             checkTask = (AppCompatImageView) itemView.findViewById(R.id.check_task);
         }
     }
+
+
 
     public void setSelection(boolean selection) {
         this.isSelected = selection;

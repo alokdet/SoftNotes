@@ -52,8 +52,8 @@
         android:id="@+id/note_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="22dp"
-        android:layout_marginEnd="22dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="25dp">
 
@@ -65,13 +65,13 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/input_note"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:hint="Type Note"
                 android:textColor="?attr/title_text_color"
                 android:background="?attr/foreground_color"
-                android:fontFamily="@font/roboto_light"
+                android:fontFamily="@font/roboto_regular"
                 android:lineSpacingExtra="8dp"
-                android:textSize="18sp" />
+                android:textSize="19sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_for_tts"

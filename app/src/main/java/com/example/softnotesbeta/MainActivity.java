@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
@@ -28,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Fade;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -40,13 +42,16 @@ import com.example.softnotesbeta.Database.NotesDatabase;
 
 import com.example.softnotesbeta.Models.DeleteNotesModel;
 import com.example.softnotesbeta.Models.DeleteTasksModel;
+import com.example.softnotesbeta.Models.NotifySelectionModel;
+import com.example.softnotesbeta.Models.SearchInvokedModel;
 import com.example.softnotesbeta.Models.SearchNotesModel;
+import com.example.softnotesbeta.Models.SelectBackModel;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NotifySelectionModel.OnSelectionRequest {
 
     private int currentFragment;
     private FragmentsAdapter fragmentsAdapter;
@@ -59,13 +64,14 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatImageView btn;
     private AppCompatImageView taskTab;
     private AppCompatImageView notesTab;
+    private AppCompatImageView mapsTab;
+    private AppCompatImageView actionSoftAi;
     private AppCompatImageView actionStartImageNote;
     private AppCompatImageView actionStartListNote;
     private AppCompatImageView actionStartTimelineNote;
+    private AppCompatTextView emptyTv;
     private AppCompatImageView actionStartTextNote;
     private CollapsingToolbarLayout toolbarLayout;
-    private AppCompatEditText searchBar;
-    private ViewPager viewPager;
     private Vibrator vibrator;
     private DeleteNotesModel deleteModel;
     private DeleteTasksModel deleteTasksModel;
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private GradientDrawable drawable;
     private boolean isCircle = false;
     //List<View> homeViews = new ArrayList<>();
+    private boolean isSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,20 +123,21 @@ public class MainActivity extends AppCompatActivity {
         actionStartListNote = (AppCompatImageView) findViewById(R.id.new_list_note);
         actionStartTextNote = (AppCompatImageView) findViewById(R.id.new_text_note);
         actionStartTimelineNote = (AppCompatImageView) findViewById(R.id.new_timeline_note);
+        actionSoftAi = (AppCompatImageView) findViewById(R.id.action_soft_ai);
         //foldersContainer = (ConstraintLayout) findViewById(R.id.folder_layout);
         pager = (ViewPager) findViewById(R.id.fragments_pager);
         actionDelete = (AppCompatImageView) findViewById(R.id.delete_action);
-        actionCamera = (AppCompatImageView) findViewById(R.id.camera_action);
+        //actionCamera = (AppCompatImageView) findViewById(R.id.camera_action);
         actionSearch = (AppCompatImageView) findViewById(R.id.search_action);
         textNoteBtn = (AppCompatImageView) findViewById(R.id.new_text_note);
-        actionSettings = (AppCompatImageView) findViewById(R.id.settings);
+        //actionSettings = (AppCompatImageView) findViewById(R.id.settings);
         taskTab = (AppCompatImageView) findViewById(R.id.tasks_tab);
         notesTab = (AppCompatImageView) findViewById(R.id.notes_tab);
+        mapsTab = (AppCompatImageView) findViewById(R.id.mindmaps_tab);
+        emptyTv = (AppCompatTextView) findViewById(R.id.empty_database_text);
         //mapsTab = (AppCompatImageView) findViewById(R.id.maps_tab);
         btn = (AppCompatImageView) findViewById(R.id.one);
-        searchBar = (AppCompatEditText) findViewById(R.id.search_box);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        viewPager = (ViewPager) findViewById(R.id.pager);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         deleteModel = DeleteNotesModel.getInstance();
@@ -142,8 +150,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentsAdapter = new FragmentsAdapter(getSupportFragmentManager());
         fragmentsAdapter.add(new NotesFragment());
         fragmentsAdapter.add(new TasksFragment());
+        fragmentsAdapter.add(new MindMapFragment());
         pager.setAdapter(fragmentsAdapter);
         currentFragment = 0;
+
+        NotifySelectionModel.getInstance().setListener(this::onSelectionRequest);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -158,15 +169,25 @@ public class MainActivity extends AppCompatActivity {
                         toolbarLayout.setTitle("Notes");
                         notesTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.android_green), PorterDuff.Mode.SRC_IN);
                         taskTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
-                        //mapsTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
+                        mapsTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
                         currentFragment = 0;
+                        expand();
                         break;
                     case 1:
                         toolbarLayout.setTitle("Tasks");
                         notesTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
                         taskTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.android_green), PorterDuff.Mode.SRC_IN);
-                        //mapsTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
+                        mapsTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
                         currentFragment = 1;
+                        collapse();
+                        break;
+                    case 2:
+                        toolbarLayout.setTitle("Mind Maps");
+                        notesTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
+                        taskTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.onBackground_light), PorterDuff.Mode.SRC_IN);
+                        mapsTab.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.android_green), PorterDuff.Mode.SRC_IN);
+                        currentFragment = 2;
+                        collapse();
                         break;
                 }
             }
@@ -195,17 +216,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        actionSettings.setOnClickListener(new View.OnClickListener() {
+        actionSoftAi.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity3.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SoftWorkspace.class);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                        Pair.create(notesTab, "one"),
+                        Pair.create(taskTab, "two"),
+                        Pair.create(mapsTab, "three"));
+                startActivity(intent, options.toBundle());
             }
         });
+
+        notesTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pager.setCurrentItem(0, true);
+            }
+        });
+
+        taskTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pager.setCurrentItem(1, true);
+            }
+        });
+
+        mapsTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pager.setCurrentItem(2, true);
+            }
+        });
+
+//        actionSettings.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), MainActivity3.class);
+//                startActivity(intent);
+//            }
+//        });
 
         actionSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentFragment == 0) {
+                    SearchInvokedModel.getInstance().startSearching();
+                } else {
+                    SearchInvokedModel.getInstance().startTaskSearching();
+                }
+/*
                 if (searchBar.getVisibility() == View.GONE) {
                     searchBar.setVisibility(View.VISIBLE);
                     toolbarLayout.setTitle(" ");
@@ -243,17 +303,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                     actionStart.setVisibility(View.VISIBLE);
                 }
+
+                 */
             }
         });
 
         actionStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentFragment == 0) {
-                    Intent intent1 = new Intent(getApplicationContext(), Workspace.class);
-                    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, actionStart, "actionBtn");
-                    startActivity(intent1, activityOptions.toBundle());
-                } else {
+                if (currentFragment == 1) {
                     Intent intent = new Intent(getApplicationContext(), TaskWorkspace.class);
                     intent.putExtra("work", "create");
                     ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, actionStart, "actionBtn");
@@ -316,20 +374,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        actionStart.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (currentFragment == 0) {
-                    if (isCircle) {
-                        expand();
-                    } else {
-                        collapse();
-                    }
-                    isCircle = !isCircle;
-                }
-                return true;
-            }
-        });
+//        actionStart.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                if (currentFragment == 0) {
+//                    if (isCircle) {
+//                        expand();
+//                    } else {
+//                        collapse();
+//                    }
+//                    isCircle = !isCircle;
+//                }
+//                return true;
+//            }
+//        });
 
         actionStartTextNote.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -344,13 +402,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        actionCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TextScannerActivity.class);
-                startActivity(intent);
-            }
-        });
+//        actionCamera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), TextScannerActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         actionDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,6 +424,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onSelectionRequest(boolean isSelected) {
+        this.isSelected = isSelected;
+        if (isSelected) {
+            actionDelete.setVisibility(View.VISIBLE);
+        } else {
+            actionDelete.setVisibility(View.GONE);
+        }
     }
 
     public interface ParentChangedListener {
@@ -432,58 +500,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class ToolbarPagerAdapter extends PagerAdapter {
-
-        public ToolbarPagerAdapter() {
-
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == ((View) object);
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            int resId = 0;
-            switch (position) {
-                case 0:
-                    resId = R.id.page_text1;
-                    break;
-                case 1:
-                    resId = R.id.page_text2;
-                    break;
-                case 2:
-                    resId = R.id.page_text3;
-                    break;
-            }
-            return findViewById(resId);
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-
-        }
-    }
-
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean previouslyStarted = preferences.getBoolean("First_time", false);
-        if (!previouslyStarted) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("First_time", Boolean.TRUE);
-            editor.commit();
-            Intent intent = new Intent(getApplicationContext(), IntroductionActivity.class);
-            startActivity(intent);
+    public void onBackPressed() {
+        if (isSelected) {
+            if (currentFragment==0) {
+                SelectBackModel.getInstance().backNote();
+            } else {
+                SelectBackModel.getInstance().backTask();
+            }
+            isSelected = false;
+        } else {
+            super.onBackPressed();
+            return;
         }
     }
 }

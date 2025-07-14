@@ -126,17 +126,16 @@ public class TimelineWorkspace extends AppCompatActivity implements TimelineItem
             public void onClick(View view) {
                 String time = new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(new Date());
                 if (update) {
-                    timeList.get(currentPosition).setText(time);
-                    textList.get(currentPosition).setText(textField.getText().toString());
+                    timeList.get(currentPosition).setStringText(time);
+                    textList.get(currentPosition).setStringText(textField.getText().toString());
                     update = false;
                 } else {
                     String text = textField.getText().toString();
 
                     timeList.add(new ListItem(time));
                     textList.add(new ListItem(text));
-
-                    adapter.notifyDataSetChanged();
                 }
+                adapter.notifyDataSetChanged();
                 textField.setText("");
             }
         });
@@ -184,6 +183,7 @@ public class TimelineWorkspace extends AppCompatActivity implements TimelineItem
     @Override
     public void onClick(int position, String time, String text) {
         update = true;
+        this.currentPosition = position;
         textField.setText(text);
         timeVIew.setText(time);
     }

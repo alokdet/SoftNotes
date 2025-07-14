@@ -60,8 +60,6 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
     private AppCompatImageView actionInsertFields;
     private AppCompatImageView actionCloseFields;
     private AppCompatImageView actionShowHideIndexes;
-    private AppCompatImageView actionUndo;
-    private AppCompatImageView actionRedo;
     private AppCompatImageView operationSummation;
     private AppCompatImageView operationPercentage;
     private AppCompatImageView operationAverage;
@@ -150,8 +148,7 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
         actionCloseFields = (AppCompatImageView) findViewById(R.id.close_fields_panel);
         //actionShowHideIndexes = (AppCompatImageView) findViewById(R.id.action_hide_index);
         operationSummation = (AppCompatImageView) findViewById(R.id.operation_summation);
-        operationPercentage = (AppCompatImageView) findViewById(R.id.operation_percentage);
-        actionUndo = (AppCompatImageView) findViewById(R.id.action_undo);
+        //operationPercentage = (AppCompatImageView) findViewById(R.id.operation_percentage);
         //actionRedo = (AppCompatImageView) findViewById(R.id.action_redo);
         operationAverage = (AppCompatImageView) findViewById(R.id.operation_average);
         titleField = (AppCompatEditText) findViewById(R.id.title_box);
@@ -165,11 +162,11 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
         opResultLayout = findViewById(R.id.bottom_sheet_average);
         opResultBottomSheet = BottomSheetBehavior.from(opResultLayout);
 
-        percentageInputLayout = findViewById(R.id.bottom_sheet_percentage);
-        percentageInputBottomSheet = BottomSheetBehavior.from(percentageInputLayout);
+//        percentageInputLayout = findViewById(R.id.bottom_sheet_percentage);
+//        percentageInputBottomSheet = BottomSheetBehavior.from(percentageInputLayout);
 
         opResultBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        //percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         operationLabelTv = opResultLayout.findViewById(R.id.top_text);
         selectKeyColumn = opResultLayout.findViewById(R.id.key_column);
@@ -177,8 +174,8 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
         operationResultTv = opResultLayout.findViewById(R.id.result);
         closeResultPanel = opResultLayout.findViewById(R.id.close_result_panel);
 
-        proceedPercentageCalculation =  percentageInputLayout.findViewById(R.id.proceed);
-        inputPercentageValue = percentageInputLayout.findViewById(R.id.input_value);
+//        proceedPercentageCalculation =  percentageInputLayout.findViewById(R.id.proceed);
+//        inputPercentageValue = percentageInputLayout.findViewById(R.id.input_value);
 
         ViewCompat.setTransitionName(layout, getIntent().getStringExtra("transitionName1"));
         noteId = intent.getLongExtra("noteId", 0);
@@ -213,8 +210,8 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
                     String value = valueField.getText().toString();
 
                     if (update) {
-                        keyList.get(updatePosition).setText(key);
-                        valueList.get(updatePosition).setText(value);
+                        keyList.get(updatePosition).setStringText(key);
+                        valueList.get(updatePosition).setStringText(value);
                         update = false;
                     } else {
                         keyList.add(new ListItem(key));
@@ -231,31 +228,31 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
             }
         });
 
-        proceedPercentageCalculation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.isEmpty(inputPercentageValue.getText())) {
-                    Toast.makeText(TableNoteWorkspace.this, "Value cannot be null", Toast.LENGTH_SHORT).show();
-                } else {
-                    percentageOutOf = Float.parseFloat(inputPercentageValue.getText().toString());
-                    percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-
-                    currentOperation = OPERATION_PERCENTAGE;
-                    opResultBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    operationLabelTv.setText("Percentage of the Column");
-
-                    String result;
-
-                    if (operationColumn == COLUMN_KEY) {
-                        result = calculatePercentage(keyList);
-                    } else {
-                        result = calculatePercentage(valueList);
-                    }
-
-                    operationResultTv.setText(result);
-                }
-            }
-        });
+//        proceedPercentageCalculation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (TextUtils.isEmpty(inputPercentageValue.getText())) {
+//                    Toast.makeText(TableNoteWorkspace.this, "Value cannot be null", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    percentageOutOf = Float.parseFloat(inputPercentageValue.getText().toString());
+//                    percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+//
+//                    currentOperation = OPERATION_PERCENTAGE;
+//                    opResultBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+//                    operationLabelTv.setText("Percentage of the Column");
+//
+//                    String result;
+//
+//                    if (operationColumn == COLUMN_KEY) {
+//                        result = calculatePercentage(keyList);
+//                    } else {
+//                        result = calculatePercentage(valueList);
+//                    }
+//
+//                    operationResultTv.setText(result);
+//                }
+//            }
+//        });
 
         actionCloseFields.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,12 +286,12 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
             }
         });
 
-        operationPercentage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-        });
+//        operationPercentage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            }
+//        });
 
         operationAverage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,7 +379,7 @@ public class TableNoteWorkspace extends AppCompatActivity implements TableItemLi
         });
 
         opResultBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        //percentageInputBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
     }
 

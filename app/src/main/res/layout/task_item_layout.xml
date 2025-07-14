@@ -7,6 +7,7 @@
     android:layout_marginEnd="18dp"
     android:layout_marginTop="18dp"
     android:background="@drawable/task_preview_background"
+    android:backgroundTint="?attr/foreground_color"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -18,7 +19,7 @@
         android:src="@drawable/icon_done"
         android:visibility="gone"
         android:background="@drawable/circular_background"
-        app:layout_constraintBottom_toBottomOf="@id/task_due_tv"
+        app:layout_constraintBottom_toBottomOf="@id/task_created_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/task_name"
         app:tint="@color/black" />
@@ -39,7 +40,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/task_due_tv"
+        android:id="@+id/task_created_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Due: Saturday, 27 May"

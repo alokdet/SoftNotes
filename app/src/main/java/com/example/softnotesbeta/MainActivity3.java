@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -44,6 +45,7 @@ public class MainActivity3 extends AppCompatActivity implements StepCLickListene
     private RecyclerView recyclerView;
     private AppCompatEditText inputTitle;
     private AppCompatImageView actionEditTask;
+    private ConstraintLayout layout;
     private NotesDatabase database;
     private TaskDao taskDao;
     private Task task;
@@ -86,6 +88,9 @@ public class MainActivity3 extends AppCompatActivity implements StepCLickListene
         });
 
         getSupportActionBar().hide();
+        layout = (ConstraintLayout) findViewById(R.id.action_btn);
+
+        ViewCompat.setTransitionName(layout, getIntent().getStringExtra("transitionName1"));
 
         this.currentTaskId = getIntent().getLongExtra("task_id", 0);
 
@@ -98,6 +103,7 @@ public class MainActivity3 extends AppCompatActivity implements StepCLickListene
         recyclerView = (RecyclerView) findViewById(R.id.steps);
         inputTitle = (AppCompatEditText) findViewById(R.id.title_bar);
         actionEditTask = (AppCompatImageView) findViewById(R.id.edit_task);
+        layout = (ConstraintLayout) findViewById(R.id.action_btn);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         stepAdapter = new StepsListAdapter(steps, getApplicationContext(), this::onStepClicked);

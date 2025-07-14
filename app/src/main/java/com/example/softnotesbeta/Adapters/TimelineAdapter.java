@@ -38,8 +38,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.Timeli
 
     @Override
     public void onBindViewHolder(@NonNull TimelineViewHolder holder, int position) {
-        holder.displayTime.setText(timeList.get(position).getText());
-        holder.displayText.setText(textList.get(position).getText());
+        holder.displayTime.setText(timeList.get(position).getStringText());
+        holder.displayText.setText(textList.get(position).getStringText());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

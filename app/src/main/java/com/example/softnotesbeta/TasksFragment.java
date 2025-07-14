@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,7 +26,10 @@ import com.example.softnotesbeta.Database.NotesDatabase;
 import com.example.softnotesbeta.Entities.Task;
 import com.example.softnotesbeta.Models.CreateTaskModel;
 import com.example.softnotesbeta.Models.DeleteTasksModel;
+import com.example.softnotesbeta.Models.NotifySelectionModel;
+import com.example.softnotesbeta.Models.SearchInvokedModel;
 import com.example.softnotesbeta.Models.SearchNotesModel;
+import com.example.softnotesbeta.Models.SelectBackModel;
 import com.example.softnotesbeta.ViewModels.TasksVIewModel;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -33,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TasksFragment extends Fragment implements OnTaskClickListener, TaskSelectionListener, DeleteTasksModel.OnDeleteRequest, SearchNotesModel.TextChangeListenerForTasks {
+public class TasksFragment extends Fragment implements OnTaskClickListener, TaskSelectionListener, DeleteTasksModel.OnDeleteRequest, SearchNotesModel.TextChangeListenerForTasks, SearchInvokedModel.OnTaskSearchRequest, SelectBackModel.TaskBackRequest {
 
     private RecyclerView recyclerView;
     private ViewGroup parent;
@@ -43,6 +47,7 @@ public class TasksFragment extends Fragment implements OnTaskClickListener, Task
     private TaskAdapter adapter;
     private TasksVIewModel viewModel;
     private List<Task> selectedTasks;
+    private LinearLayoutManager layoutManager;
     private CollapsingToolbarLayout toolbarLayout;
     private boolean selectionMode = false;
 
@@ -73,9 +78,12 @@ public class TasksFragment extends Fragment implements OnTaskClickListener, Task
 
         SearchNotesModel.getInstance().setTasksListener(this::onFilterTextTasks);
         DeleteTasksModel.getInstance().setListener(this::onDeleteRequest);
+        SearchInvokedModel.getInstance().setTaskListener(this::onTaskSearchRequest);
+        SelectBackModel.getInstance().setTaskListener(this::onTaskBackRequest);
 
+        layoutManager = new LinearLayoutManager(getContext());
         adapter = new TaskAdapter(getContext(), this, this::onTaskSelected);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         viewModel = new ViewModelProvider(this).get(TasksVIewModel.class);
@@ -105,6 +113,7 @@ public class TasksFragment extends Fragment implements OnTaskClickListener, Task
                     selectionMode = false;
                     adapter.setSelection(false);
                     toolbarLayout.setTitle("Tasks");
+                    NotifySelectionModel.getInstance().selectChanged(false);
                 }
             } else {
                 //select the task
@@ -135,10 +144,11 @@ public class TasksFragment extends Fragment implements OnTaskClickListener, Task
         selectionMode = isSelected;
         if (isSelected) {
             getActivity().findViewById(R.id.delete_action).setVisibility(View.VISIBLE);
-            //vibrate();
+            NotifySelectionModel.getInstance().selectChanged(true);
             toolbarLayout.setTitle(String.valueOf(selectedTasks.size()) + " selected");
         } else {
             getActivity().findViewById(R.id.delete_action).setVisibility(View.GONE);
+            NotifySelectionModel.getInstance().selectChanged(false);
             toolbarLayout.setTitle("Tasks");
         }
     }
@@ -148,10 +158,37 @@ public class TasksFragment extends Fragment implements OnTaskClickListener, Task
         deleteSelectedTasks();
         selectionMode = false;
         adapter.setSelection(false);
+        selectedTasks.clear();
+        toolbarLayout.setTitle("Tasks");
+        getActivity().findViewById(R.id.delete_action).setVisibility(View.GONE);
     }
 
     @Override
     public void onFilterTextTasks(String input) {
         viewModel.filterText.setValue(input);
+    }
+
+    @Override
+    public void onTaskSearchRequest() {
+        Intent intent = new Intent(getContext(), TasksSearchActivity.class);
+        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), recyclerView, ViewCompat.getTransitionName(recyclerView));
+        startActivity(intent, activityOptions.toBundle());
+    }
+
+    @Override
+    public void onTaskBackRequest() {
+        recyclerView.setAdapter(null);
+        recyclerView.setLayoutManager(null);
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter.notifyDataSetChanged();
+
+        toolbarLayout.setTitle("Tasks");
+        adapter.setSelection(false);
+        selectionMode = false;
+        selectedTasks.clear();
+
+        getActivity().findViewById(R.id.delete_action).setVisibility(View.GONE);
     }
 }

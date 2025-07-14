@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="?attr/background_color"
+    android:fitsSystemWindows="true"
     tools:context=".TableNoteWorkspace">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -76,8 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/table_foreground_layer_surface"
-        android:transitionName="actionBtn"
         android:paddingBottom="24dp"
+        android:transitionName="actionBtn"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -119,10 +119,10 @@
             android:id="@+id/top_jj"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:visibility="gone"
             android:background="@drawable/bottom_sheet_top"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/text_fields_container"
@@ -133,35 +133,35 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/column_first_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="17sp"
-            android:hint="Column one"
-            android:background="?attr/background_color"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toTopOf="parent"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/column_first_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/background_color"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="Column one"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="17sp"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/column_two_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="17sp"
-            android:singleLine="true"
-            android:hint="Column two"
-            android:background="?attr/background_color"
-            android:padding="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toBottomOf="@id/column_first_input"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/column_two_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/background_color"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="Column two"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="17sp"
+                app:layout_constraintTop_toBottomOf="@id/column_first_input" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -170,41 +170,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="100dp"
-            android:orientation="horizontal"
-            android:background="@drawable/table_bottom_layout_bg">
+            android:background="@drawable/table_bottom_layout_bg"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/operation_summation"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/icon_summation"
                 android:tint="?attr/icon_tint"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/operation_percentage"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/icon_summation"/>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/operation_percentage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:tint="?attr/icon_tint"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/operation_average"
-                app:layout_constraintStart_toEndOf="@id/operation_summation"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/icon_percent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/operation_average"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/icon_bar_chart"
                 android:tint="?attr/icon_tint"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/operation_percentage"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/icon_bar_chart"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/operation_summation"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -213,34 +202,34 @@
             android:id="@+id/close_fields_panel"
             android:layout_width="50dp"
             android:layout_height="25dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/xxxxxxxxxxxxxx"
+            android:backgroundTint="?attr/circular_background_tint"
             android:src="@drawable/icon_close"
             android:tint="?attr/icon_tint"
             android:visibility="gone"
-            android:background="@drawable/xxxxxxxxxxxxxx"
-            android:backgroundTint="?attr/circular_background_tint"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/text_fields_container"
-            android:layout_marginEnd="24dp" />
+            app:layout_constraintTop_toTopOf="@id/text_fields_container" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/add_element"
             android:layout_width="100dp"
             android:layout_height="80dp"
+            android:background="@drawable/table_insert_widget_bg"
             android:padding="18dp"
             android:src="@drawable/icon_add"
-            android:background="@drawable/table_insert_widget_bg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/bottom_sheet_percentage"
-        layout="@layout/percentage_helper_bottom_sheet_behaviour"/>
+<!--    <include-->
+<!--        android:id="@+id/bottom_sheet_percentage"-->
+<!--        layout="@layout/percentage_helper_bottom_sheet_behaviour" />-->
 
     <include
         android:id="@+id/bottom_sheet_average"
-        layout="@layout/table_operation_result_bottom_sheet_behaviour"/>
+        layout="@layout/table_operation_result_bottom_sheet_behaviour" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,9 +13,6 @@ import java.util.List;
 @Dao
 public interface PreviewDao {
 
-    @Query("SELECT * FROM previews WHERE parent LIKE :parent")
-    DataSource.Factory<Integer, Preview> getPreviewsPagedList(String parent);
-
     @Query("SELECT * FROM previews")
     DataSource.Factory<Integer, Preview> getAllPreviewsPagedList();
 

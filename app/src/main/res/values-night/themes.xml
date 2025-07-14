@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="background_color">@color/black</item>
-        <item name="foreground_color">@color/dark_foreground</item>
+        <item name="foreground_color">#121212</item> <!-- @color/dark_foreground -->
         <item name="title_text_color">@color/white</item>
         <item name="sub_text_color">@android:color/tab_indicator_text</item>
         <item name="extra_text_color">#C6C6C6</item>
